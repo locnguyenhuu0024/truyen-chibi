@@ -1,0 +1,74 @@
+import { ConfigProvider, Image, Space, Typography } from 'antd';
+import List from "antd/es/list"
+import { Comic } from "../../../types/Comic"
+import { BrightColorPalette } from '../../../styles/palette';
+import { CustomizeRenderEmpty } from '../../Customizes';
+import { CustomizeTag } from '../../Customizes';
+import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
+import { getComicDetail } from '../../../utils/getRoute';
+
+type ListSearchedComicProps = {
+  listSearchedComic: Comic[]
+}
+
+const scrollStyle = {
+  height: 'fit-content',
+  maxHeight: '400px',
+  width: 640,
+  overflow: 'auto',
+  border: '1px solid rgba(140, 140, 140, 0.35)',
+}
+
+export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({listSearchedComic}) => {
+
+  return (
+    <div style={{...scrollStyle}}>
+      <ConfigProvider renderEmpty={CustomizeRenderEmpty}>
+        <List
+          style={{padding: 8, backgroundColor: 'white', borderRadius: 4}}
+          size='large'
+          itemLayout="horizontal"
+          dataSource={listSearchedComic}
+          renderItem={(item, index) => (
+            <Link key={`${index}-${item?.id}`} to={getComicDetail(item.id)}>
+              <List.Item key={`${index}-${item?.id}`}>
+                <Space direction='horizontal'>
+                  <Image
+                    width={100}
+                    src={item?.thumbnail}
+                    preview={false}
+                  />
+                  <Space direction='vertical'>
+                    <Typography.Title
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        color: BrightColorPalette.Text
+                      }}
+                    >{item?.title}</Typography.Title>
+                    <Typography.Paragraph
+                      style={{
+                        fontSize: 12,
+                        color: BrightColorPalette.SecondaryText
+                      }}
+                      ellipsis={{
+                        rows: 3,
+                        expandable: false
+                      }}
+                    >{item?.short_description}</Typography.Paragraph>
+                    <Space size={'small'}>
+                      {
+                        item.genres.map((genre) => <CustomizeTag genre={genre} />)
+                      }
+                    </Space>
+                  </Space>
+                </Space>
+              </List.Item>
+            </Link>
+          )}
+        />
+      </ConfigProvider>
+    </div>
+  )
+})

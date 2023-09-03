@@ -1,0 +1,10 @@
+.popover-list-search-comics{
+  max-width: 640px;
+}
+
+.genre-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Hiển thị 4 cột */
+  grid-gap: 16px; /* Khoảng cách giữa các item */
+  padding: 16px; /* Khoảng cách ngoài */
+}

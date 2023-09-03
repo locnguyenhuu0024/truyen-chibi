@@ -1,0 +1,26 @@
+.button.login {
+  border: none !important; /* BrightColorPalette.Accent */
+  color: #FFFFFF !important;
+}
+
+.button.login:hover {
+  border-color: #FFFFFF !important;
+  color: #FF4081 !important; /* BrightColorPalette.Hover */
+}
+
+.button.signup {
+  background-color: #FF4081; /* BrightColorPalette.Accent */
+  color: #FFFFFF !important;
+}
+
+.button.signup:hover {
+  background-color: #FFFFFF !important;
+  color: #FF4081 !important; /* BrightColorPalette.Hover */
+}
+
+.button.user {
+  border: 1px solid #FFFFFF;
+  font-size: 16px;
+  padding: 8px 12px;
+  height: fit-content;
+}

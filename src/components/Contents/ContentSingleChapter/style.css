@@ -1,0 +1,4 @@
+.ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical{
+  overflow: auto !important;
+  height: 500px !important;
+}
