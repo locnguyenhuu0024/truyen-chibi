@@ -3,7 +3,6 @@ import { Col, Popover, Row } from "antd"
 import { Comic } from "../../../types/Comic"
 import { ListSearchedComic } from "./ListSearchedComics"
 import { useState } from "react"
-import debounce from 'lodash.debounce';
 import { observer } from "mobx-react-lite"
 
 type HeaderSearchBarProps = {
@@ -18,29 +17,39 @@ const searchBarStyle = {
 }
 
 export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({onSearch, searchedComics}) => {
-  // const [showListSearched, setShowListSearched] = useState<boolean>(false);
   const [query, setQuery] = useState<string>('')
+  // Sử dụng state để lưu trạng thái của setTimeout
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>();
 
-  const handleSearchingComics = () => {
-    debouncedSearch(query)
+  // Hàm này được gọi khi người dùng thay đổi giá trị trong input
+  const handleInputChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = event.target.value;
+    
+    // Hủy bỏ bất kỳ timeout cũ nào để tránh tìm kiếm không cần thiết
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    // Đặt timeout mới, sau 300ms, tìm kiếm sẽ được thực hiện
+    const newTimeout = setTimeout(() => {
+      onSearch(newQuery);
+    }, 200);
+
+    // Lưu trạng thái timeout mới vào state
+    setSearchTimeout(newTimeout);
+    
+    // Cập nhật giá trị tìm kiếm
+    setQuery(newQuery);
   }
-  
-  // const handleClickToShowList = () => {
-  //   setShowListSearched(true);
-  // };
-
-  // const handleCloseSearchingList = () => setShowListSearched(false);
-
-  const debouncedSearch = debounce(onSearch, 100); 
 
   return (
-    <Row style={{width: '100%', height: '100%'}} justify={'center'} align={'middle'}>
+    <Row style={{width: '100%'}} justify={'center'} align={'middle'}>
       <Col>
         <Popover
           content={
             <ListSearchedComic listSearchedComic={searchedComics} />
           }
-          // open={showListSearched}
+          
           trigger="hover"
           placement="bottom"
           className="popover-list-search-comics"
@@ -50,10 +59,8 @@ export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({onSea
               placeholder="Nhập tên truyện..." 
               onSearch={onSearch}
               style={searchBarStyle} 
-              onChange={(e) => setQuery(e.target.value)}
-              // onBlur={handleCloseSearchingList}
-              // onClick={handleClickToShowList}
-              onKeyUp={handleSearchingComics}
+              value={query}
+              onChange={(e) => handleInputChange(e)}
             />
           </Row>
         </Popover>

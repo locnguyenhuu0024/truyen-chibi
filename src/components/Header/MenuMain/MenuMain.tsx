@@ -11,6 +11,7 @@ import useScreenSize from '../../../utils/screenWidth';
 
 type MenuMainProps = {
   genres: Genre[] | null
+  onClickItemMenu: () => void
 }
 
 const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
@@ -41,7 +42,7 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
     },
   ])
 }
-export const MenuMain: React.FC<MenuMainProps> = observer(({genres}) => {
+export const MenuMain: React.FC<MenuMainProps> = observer(({genres, onClickItemMenu}) => {
   const { isMobile } = useScreenSize()
   
   return (
@@ -49,6 +50,7 @@ export const MenuMain: React.FC<MenuMainProps> = observer(({genres}) => {
       style={{backgroundColor: BrightColorPalette.Primary, color: '#FFFFFF'}} 
       mode={isMobile ? 'inline' : 'horizontal'} 
       items={menuMain(genres)} 
+      onClick={onClickItemMenu}
     />
   );
 });

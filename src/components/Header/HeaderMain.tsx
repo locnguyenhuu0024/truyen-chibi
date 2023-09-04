@@ -42,6 +42,10 @@ export const HeaderMain : React.FC = observer(() => {
     setSearchedComics(listSearchComics.comics);
   };
 
+  const onClickItemMenu = () => {
+    setOpen(false)
+  };
+
   return(
     <Header style={headerStyle}>
       <Row>
@@ -52,7 +56,7 @@ export const HeaderMain : React.FC = observer(() => {
           !isMobile 
             ? <>
               <Col span={13}>
-                <MenuMain genres={genres} />
+                <MenuMain genres={genres} onClickItemMenu={onClickItemMenu} />
               </Col>
               <Col span={5}>
                 <HeaderSearchBar 
@@ -94,7 +98,11 @@ export const HeaderMain : React.FC = observer(() => {
                   open={open}
                   key={'left'}
                 >
-                  <MenuMain genres={genres} />
+                  <HeaderSearchBar 
+                    onSearch={onSearch}
+                    searchedComics={searchedComics}
+                  />
+                  <MenuMain genres={genres} onClickItemMenu={onClickItemMenu}/>
                 </Drawer>
               </Col>
             </>
