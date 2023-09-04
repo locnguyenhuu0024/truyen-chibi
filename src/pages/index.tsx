@@ -9,6 +9,7 @@ import {
 import { ComicDetailPage } from "./ComicDetailPage";
 import { RouteComicEnums as RouteComics } from "../types/Route";
 import { SingleChapterPage } from "./SingleChapterPage";
+import useScreenSize from "../utils/screenWidth";
 
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -18,15 +19,20 @@ const siderStyle: React.CSSProperties = {
 };
 
 export const IndexPage : React.FC = observer(() => {
+  const { isMobile } = useScreenSize()
   return (
     <Layout hasSider>
-      <Sider style={siderStyle}></Sider>
+      {
+        !isMobile ? <Sider style={siderStyle}></Sider> : <></>
+      }
       <Routes>
         <Route path={RouteComics.Home} Component={HomePage} />
         <Route path={RouteComics.ComicDetail} Component={ComicDetailPage} />
         <Route path={RouteComics.SingleChapter} Component={SingleChapterPage} />
       </Routes>
-      <Sider style={siderStyle}></Sider>
+      {
+        !isMobile ? <Sider style={siderStyle}></Sider> : <></>
+      }
     </Layout>
   )
 })

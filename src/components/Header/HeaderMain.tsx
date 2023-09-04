@@ -10,6 +10,9 @@ import { AuthenField, UserField } from "./RightFields"
 import { observer } from "mobx-react-lite"
 import { useRootStore } from "../../stores"
 import { MenuMain } from "./MenuMain/MenuMain"
+import useScreenSize from "../../utils/screenWidth"
+import { Button, Drawer } from "antd"
+import { EllipsisOutlined } from "@ant-design/icons"
 
 const headerStyle = {
   backgroundColor: BrightColorPalette.Primary
@@ -17,10 +20,12 @@ const headerStyle = {
 
 export const HeaderMain : React.FC = observer(() => {
   const { authStore, comicStore } = useRootStore();
+  const { isMobile } = useScreenSize()
   const { user, logout } = authStore
   const { genres, getGenres } = comicStore
 
-  const [searchedComics, setSearchedComics] = useState<Comic[]>([]);
+  const [searchedComics, setSearchedComics] = useState<Comic[]>([])
+  const [open, setOpen] = useState<boolean>(false)
 
   useEffect(() => {
     getGenres()
@@ -40,25 +45,60 @@ export const HeaderMain : React.FC = observer(() => {
   return(
     <Header style={headerStyle}>
       <Row>
-        <Col span={2}>
+        <Col span={isMobile ? 12 : 2}>
           <strong>Truyện Chibi</strong>
         </Col>
-        <Col span={13}>
-          <MenuMain genres={genres} />
-        </Col>
-        <Col span={5}>
-          <HeaderSearchBar 
-            onSearch={onSearch}
-            searchedComics={searchedComics}
-          />
-        </Col>
-        <Col span={4}>
-          {
-            !user
-              ? <AuthenField />
-              : <UserField user={user} logout={logout}/>
-          }
-        </Col>
+        {
+          !isMobile 
+            ? <>
+              <Col span={13}>
+                <MenuMain genres={genres} />
+              </Col>
+              <Col span={5}>
+                <HeaderSearchBar 
+                  onSearch={onSearch}
+                  searchedComics={searchedComics}
+                />
+              </Col>
+              <Col span={4}>
+                {
+                  !user
+                    ? <AuthenField />
+                    : <UserField user={user} logout={logout}/>
+                }
+              </Col>
+            </>
+            : <>
+              <Col span={8}></Col>
+              <Col span={4} style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
+                <Button 
+                  icon={<EllipsisOutlined />} 
+                  onClick={() => setOpen(true)}
+                  ghost
+                ></Button>
+                <Drawer
+                  title={
+                    <Row justify={'space-between'} align={'middle'}>
+                      <Col><strong>Truyện Chibi</strong></Col>
+                      <Col>
+                        {
+                          !user
+                            ? <AuthenField />
+                            : <UserField user={user} logout={logout}/>
+                        }
+                      </Col>
+                    </Row>
+                  }
+                  placement={'left'}
+                  onClose={() => setOpen(false)}
+                  open={open}
+                  key={'left'}
+                >
+                  <MenuMain genres={genres} />
+                </Drawer>
+              </Col>
+            </>
+        }
       </Row>
     </Header>
   )

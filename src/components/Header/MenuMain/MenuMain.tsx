@@ -7,6 +7,7 @@ import { BrightColorPalette } from '../../../styles/palette';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { Link } from 'react-router-dom';
 import { RouteComicEnums as RouteComics } from '../../../types/Route';
+import useScreenSize from '../../../utils/screenWidth';
 
 type MenuMainProps = {
   genres: Genre[] | null
@@ -41,12 +42,12 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
   ])
 }
 export const MenuMain: React.FC<MenuMainProps> = observer(({genres}) => {
-
+  const { isMobile } = useScreenSize()
+  
   return (
     <Menu 
-      
       style={{backgroundColor: BrightColorPalette.Primary, color: '#FFFFFF'}} 
-      mode='horizontal' 
+      mode={isMobile ? 'inline' : 'horizontal'} 
       items={menuMain(genres)} 
     />
   );

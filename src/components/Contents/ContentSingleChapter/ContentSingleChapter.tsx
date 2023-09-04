@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { getSingleChapterPath } from "../../../utils/getRoute";
 import { ArrowLeftOutlined, ArrowRightOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import './style.css'
+import useScreenSize from "../../../utils/screenWidth";
 
 type ContentSingleChapterProps = {
   commicId: string,
@@ -22,6 +23,7 @@ const chapterItems = (comicId: string, chapters: Chapter[]): MenuProps['items'] 
 )
 
 export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({commicId, chapterId, singleChapter}) => {
+  const { isMobile } = useScreenSize()
   const {chapters, images, chapter_name, comic_name} = singleChapter
   const currentChapterIndex = chapters.findIndex((chapter) => chapter?.id.toString() === chapterId)
   
@@ -47,25 +49,36 @@ export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({comm
         border: '1px solid rgba(140, 140, 140, 0.35)',
       }}
     >
-      <Row style={{padding: 16}}>
+      <Row style={{padding: isMobile ? 0 : 16}}>
         <Col span={24}>
           <Row justify={'center'} align={'middle'}>
-            <Col span={9} style={{display: 'flex', justifyContent: 'end', paddingRight: 16}}>
+            <Col span={isMobile ? 7 : 9} style={{display: 'flex', justifyContent: 'end', paddingRight: 16}}>
               <Link to={goToTheChapter('prev') || '#'}>
-                <Button icon={<ArrowLeftOutlined />} shape='circle' disabled={currentChapterIndex === chapters.length - 1}></Button>
+                <Button 
+                  icon={<ArrowLeftOutlined />} 
+                  shape='circle' 
+                  disabled={currentChapterIndex === chapters.length - 1}
+                ></Button>
               </Link>
             </Col>
-            <Col span={6}>
+            <Col span={isMobile ? 10 : 6}>
               <Dropdown 
                 menu={{items: chapterItems(commicId, chapters)}} 
                 trigger={['click']}
               >
-                <Button style={{width: '100%'}} icon={<UnorderedListOutlined />}>{chapter_name}</Button>
+                <Button 
+                  style={{width: '100%'}} 
+                  icon={<UnorderedListOutlined />}
+                >{chapter_name}</Button>
               </Dropdown>
             </Col>
-            <Col span={9} style={{display: 'flex', justifyContent: 'start', paddingLeft: 16}}>
+            <Col span={isMobile ? 7 : 9} style={{display: 'flex', justifyContent: 'start', paddingLeft: 16}}>
               <Link to={goToTheChapter('next') || '#'}>
-                <Button icon={<ArrowRightOutlined />} shape='circle' disabled={currentChapterIndex === 0}></Button>
+                <Button 
+                  icon={<ArrowRightOutlined />} 
+                  shape='circle' 
+                  disabled={currentChapterIndex === 0}
+                ></Button>
               </Link>
             </Col>
           </Row>
