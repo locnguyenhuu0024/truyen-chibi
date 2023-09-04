@@ -1,6 +1,6 @@
 .button.login {
   border: none !important; /* BrightColorPalette.Accent */
-  color: #FFFFFF !important;
+  color: #FFFFFF;
 }
 
 .button.login:hover {

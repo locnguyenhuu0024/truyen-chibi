@@ -3,12 +3,13 @@ import { Comic, ComicsResponse } from "../../../../types/Comic"
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { LoadingOutlined } from "@ant-design/icons";
-import { CustomizeParagraph, CustomizeText } from "../../../Customizes";
+import { CustomizeParagraph, CustomizeText, CustomizeTitle } from "../../../Customizes";
 import { BrightColorPalette as Palette } from "../../../../styles/palette";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import { useRootStore } from "../../../../stores";
 import { getComicDetail } from "../../../../utils/getRoute";
+import useScreenSize from "../../../../utils/screenWidth";
 
 type ComicsListMainProps = {
   comicResponse: ComicsResponse,
@@ -16,6 +17,7 @@ type ComicsListMainProps = {
 
 const { Meta } = Card
 export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicResponse}) => {
+  const { isMobile } = useScreenSize()
   const {comicStore} = useRootStore()
   const {getRecentUpdatedComics} = comicStore;
 
@@ -58,19 +60,26 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
         }
       >
         <List
-          grid={{ gutter: 8, column: 5 }}
+          grid={isMobile ? { gutter: 0, column: 2 } : { gutter: 8, column: 5 }}
           dataSource={currentComicList}
           renderItem={(comic) => (
             <List.Item key={comic.id + comic.title}>
-              <Link to={`${getComicDetail(comic.id)}`}>
+              <Link 
+                to={`${getComicDetail(comic.id)}`}
+                style={{
+                  display: "flex", 
+                  justifyContent: 'center', 
+                  alignItems: 'center'
+                }}
+              >
                 <Card
                   hoverable
-                  style={{ width: 200, height: 400 }}
+                  style={isMobile ? { width: 180, height: 320} : { width: 200, height: 400 }}
                   cover={<img height={220} alt={comic.id} src={comic.thumbnail} />}
                 >
                   <Meta 
-                    title={comic.title} 
-                    description={<CustomizeParagraph value={comic.short_description} limitRow={3} />}
+                    title={<CustomizeTitle title={comic.title} style={{fontSize: isMobile ? 14 : 16}} />} 
+                    description={!isMobile && <CustomizeParagraph value={comic.short_description} limitRow={2} />}
                   />
                   <Row justify={'space-between'}>
                     <CustomizeText style={{color: Palette.Accent}} value={comic.last_chapter.name}/>
