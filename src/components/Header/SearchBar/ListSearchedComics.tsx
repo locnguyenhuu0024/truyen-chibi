@@ -1,12 +1,13 @@
-import { ConfigProvider, Image, Space, Typography } from 'antd';
+import { ConfigProvider, Divider, Image, Space, Typography } from 'antd';
 import List from "antd/es/list"
 import { Comic } from "../../../types/Comic"
 import { BrightColorPalette } from '../../../styles/palette';
-import { CustomizeRenderEmpty } from '../../Customizes';
+import { CustomizeRenderEmpty, CustomizeText } from '../../Customizes';
 import { CustomizeTag } from '../../Customizes';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { getComicDetail } from '../../../utils/getRoute';
+import useScreenSize from '../../../utils/screenWidth';
 
 type ListSearchedComicProps = {
   listSearchedComic: Comic[]
@@ -21,9 +22,10 @@ const scrollStyle = {
 }
 
 export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({listSearchedComic}) => {
+  const { isMobile } = useScreenSize()
 
   return (
-    <div style={{...scrollStyle}}>
+    <div style={{...scrollStyle, width: isMobile ? 300 : 640}}>
       <ConfigProvider renderEmpty={CustomizeRenderEmpty}>
         <List
           style={{padding: 8, backgroundColor: 'white', borderRadius: 4}}
@@ -33,7 +35,7 @@ export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({l
           renderItem={(item, index) => (
             <Link key={`${index}-${item?.id}`} to={getComicDetail(item.id)}>
               <List.Item key={`${index}-${item?.id}`}>
-                <Space direction='horizontal'>
+                <Space direction={isMobile ? 'vertical' : 'horizontal'}>
                   <Image
                     width={100}
                     src={item?.thumbnail}
@@ -42,14 +44,15 @@ export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({l
                   <Space direction='vertical'>
                     <Typography.Title
                       style={{
-                        fontSize: 16,
+                        fontSize: isMobile ? 14 : 16,
                         fontWeight: 'bold',
                         color: BrightColorPalette.Text
                       }}
                     >{item?.title}</Typography.Title>
+                    <CustomizeText value={item.last_chapter.name} style={{color: BrightColorPalette.Accent}} />
                     <Typography.Paragraph
                       style={{
-                        fontSize: 12,
+                        fontSize: isMobile ? 10 : 12,
                         color: BrightColorPalette.SecondaryText
                       }}
                       ellipsis={{
@@ -57,12 +60,16 @@ export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({l
                         expandable: false
                       }}
                     >{item?.short_description}</Typography.Paragraph>
-                    <Space size={'small'}>
-                      {
-                        item.genres.map((genre) => <CustomizeTag genre={genre} />)
-                      }
-                    </Space>
+                    {
+                      !isMobile ?? 
+                      <Space size={'small'}>
+                        {
+                          item.genres.map((genre) => <CustomizeTag genre={genre} />)
+                        }
+                      </Space>
+                    }
                   </Space>
+                  <Divider style={{margin: '0px 0px '}}></Divider>
                 </Space>
               </List.Item>
             </Link>
