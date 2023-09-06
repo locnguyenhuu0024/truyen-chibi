@@ -8,6 +8,7 @@ import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { Link } from 'react-router-dom';
 import { RouteComicEnums as RouteComics } from '../../../types/Route';
 import useScreenSize from '../../../utils/screenWidth';
+import { getComicGenre, getNewComic, getTrendComic } from '../../../utils/getRoute';
 
 type MenuMainProps = {
   genres: Genre[] | null
@@ -22,14 +23,14 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
       label: <Link to={RouteComics.Home}>Trang chủ</Link>,
     },
     {
-      key: 'hot',
+      key: 'trending',
       icon: <FireOutlined />,
-      label: <Link to='#'>Truyện HOT</Link>,
+      label: <Link to={getTrendComic()}>Trending</Link>,
     },
     {
       key: 'new',
       icon: <StarOutlined />,
-      label: <Link to='#'>Trang mới</Link>,
+      label: <Link to={getNewComic()}>Truyện mới</Link>,
     },
     {
       key: 'genres',
@@ -37,7 +38,7 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
       label: 'Thể loại',
       children: genres?.map((genre): ItemType => ({
         key: genre.id,
-        label: <Link to='#'>{genre.name}</Link>
+        label: <Link to={getComicGenre(genre.id)}>{genre.name}</Link>
       }))
     },
   ])

@@ -15,6 +15,6 @@ type CustomizeTextProps = {
 
 export const CustomizeText : React.FC<CustomizeTextProps> = ({value, style}) => {
   return (
-    <Text style={{...textStyle, ...style}}>{value}</Text>
+    <Text style={{...textStyle, ...style}} ellipsis>{value}</Text>
   )
 }
