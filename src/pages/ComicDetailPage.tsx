@@ -18,16 +18,15 @@ export const ComicDetailPage : React.FC = observer(() => {
   const { comicStore } = useRootStore();
   const { comicDetail, getComicDetail } = comicStore
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     if(!comicId) return;
-    setLoading(true)
     getComicDetail(comicId)
-    setLoading(false)
+    setTimeout(() => {setLoading(false)}, 3000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comicId])
-
+  
   return (
     <Content style={contentStyle}>
       <ContentComicDetail loading={loading} comicDetail={comicDetail} />

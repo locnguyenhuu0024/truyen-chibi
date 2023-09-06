@@ -18,20 +18,19 @@ export const SingleChapterPage : React.FC = observer(() => {
   const { comicStore } = useRootStore();
   const { singleChapter, getSingleChapter } = comicStore
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     if(!comicId || !chapterId) return;
-
     setLoading(true)
     getSingleChapter(comicId, chapterId!)
-    setLoading(false)
+    setTimeout(() => {setLoading(false)}, 3000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comicId, chapterId])
 
   return (
     <Content style={contentStyle}>
-      <ContentSingleChapter singleChapter={singleChapter} loading={loading} commicId={comicId!} chapterId={`${chapterId}`} />
+      <ContentSingleChapter singleChapter={singleChapter} loading={loading} comicId={comicId!} chapterId={`${chapterId}`} />
     </Content>
   )
 })

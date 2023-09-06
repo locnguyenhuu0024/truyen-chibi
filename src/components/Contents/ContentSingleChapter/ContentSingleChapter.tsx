@@ -1,15 +1,15 @@
-import { Button, Col, Divider, Dropdown, Image, MenuProps, Row, Space } from "antd";
+import { Affix, Col, Divider, Image, MenuProps, Row, Skeleton, Space } from "antd";
 import { Chapter, ChapterResponse } from "../../../types/Comic";
-import { CustomizeText } from "../../Customizes";
+import { CustomizeText, CustomizeTitle } from "../../Customizes";
 import { BrightColorPalette as Palette } from "../../../styles/palette";
 import { Link } from "react-router-dom";
 import { getSingleChapterPath } from "../../../utils/getRoute";
-import { ArrowLeftOutlined, ArrowRightOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import './style.css'
 import useScreenSize from "../../../utils/screenWidth";
+import { NavigationChapter } from "./NavigationChapter";
 
 type ContentSingleChapterProps = {
-  commicId: string,
+  comicId: string,
   chapterId: string,
   singleChapter: ChapterResponse,
   loading?: boolean
@@ -22,7 +22,7 @@ const chapterItems = (comicId: string, chapters: Chapter[]): MenuProps['items'] 
   }))
 )
 
-export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({commicId, chapterId, singleChapter}) => {
+export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({comicId, chapterId, singleChapter, loading}) => {
   const { isMobile } = useScreenSize()
   const {chapters, images, chapter_name, comic_name} = singleChapter
   const currentChapterIndex = chapters.findIndex((chapter) => chapter?.id.toString() === chapterId)
@@ -32,11 +32,11 @@ export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({comm
     if(func === 'next' && currentChapterIndex !== -1){
       foundChapter = chapters[(currentChapterIndex - 1)]
       if(!foundChapter) return '#'
-      return getSingleChapterPath(commicId, foundChapter.id)
+      return getSingleChapterPath(comicId, foundChapter.id)
     }else if(func === 'prev' && currentChapterIndex != 1){
       foundChapter = chapters[(currentChapterIndex + 1)]
       if(!foundChapter) return '#'
-      return getSingleChapterPath(commicId, foundChapter.id)
+      return getSingleChapterPath(comicId, foundChapter.id)
     }
   }
   
@@ -45,43 +45,23 @@ export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({comm
       style={{
         width: '100%',
         overflow: 'auto',
-        padding: '0 16px',
         border: '1px solid rgba(140, 140, 140, 0.35)',
       }}
     >
       <Row style={{padding: isMobile ? 0 : 16}}>
         <Col span={24}>
-          <Row justify={'center'} align={'middle'}>
-            <Col span={isMobile ? 7 : 9} style={{display: 'flex', justifyContent: 'end', paddingRight: 16}}>
-              <Link to={goToTheChapter('prev') || '#'}>
-                <Button 
-                  icon={<ArrowLeftOutlined />} 
-                  shape='circle' 
-                  disabled={currentChapterIndex === chapters.length - 1}
-                ></Button>
-              </Link>
-            </Col>
-            <Col span={isMobile ? 10 : 6}>
-              <Dropdown 
-                menu={{items: chapterItems(commicId, chapters)}} 
-                trigger={['click']}
-              >
-                <Button 
-                  style={{width: '100%'}} 
-                  icon={<UnorderedListOutlined />}
-                >{chapter_name}</Button>
-              </Dropdown>
-            </Col>
-            <Col span={isMobile ? 7 : 9} style={{display: 'flex', justifyContent: 'start', paddingLeft: 16}}>
-              <Link to={goToTheChapter('next') || '#'}>
-                <Button 
-                  icon={<ArrowRightOutlined />} 
-                  shape='circle' 
-                  disabled={currentChapterIndex === 0}
-                ></Button>
-              </Link>
-            </Col>
-          </Row>
+          <CustomizeTitle title={comic_name} style={{textAlign: 'center', color: Palette.Text}} />
+          <Affix offsetTop={-30}>
+            <NavigationChapter 
+              chapterId={chapterId} 
+              chapterItems={chapterItems} 
+              chapterName={chapter_name}
+              chapters={chapters}
+              goToTheChapter={goToTheChapter}
+              isMobile={isMobile}
+              comicId={comicId}
+            />
+          </Affix>
           <Divider>
             <Space direction='vertical'>
               <div>{comic_name}</div>
@@ -90,20 +70,31 @@ export const ContentSingleChapter : React.FC<ContentSingleChapterProps> = ({comm
           </Divider>
           <Row>
             <div style={{ width: '100%' }}>
-              {
-                images.map((image) => (
-                  <Image 
-                    key={image.page} 
-                    alt={image.src} 
-                    src={image.src} 
-                    width={'100%'} 
-                    height={'auto'} 
-                    preview={false} 
-                  />
-                ))
-              }
+              <Skeleton loading={loading} active>
+                {
+                  images.map((image) => (
+                    <Image 
+                      key={image.page} 
+                      alt={image.src} 
+                      src={image.src} 
+                      width={'100%'} 
+                      height={'auto'} 
+                      preview={false} 
+                    />
+                  ))
+                }
+              </Skeleton>
             </div>
           </Row>
+          <NavigationChapter 
+            chapterId={chapterId} 
+            chapterItems={chapterItems} 
+            chapterName={chapter_name}
+            chapters={chapters}
+            goToTheChapter={goToTheChapter}
+            isMobile={isMobile}
+            comicId={comicId}
+          />
         </Col>
       </Row>
     </div>

@@ -8,7 +8,7 @@ type ContentComicDetailProps = {
   loading?: boolean
 }
 
-export const ContentComicDetail : React.FC<ContentComicDetailProps> = ({comicDetail}) => {
+export const ContentComicDetail : React.FC<ContentComicDetailProps> = ({comicDetail, loading}) => {
 
   return (
     <div
@@ -21,8 +21,8 @@ export const ContentComicDetail : React.FC<ContentComicDetailProps> = ({comicDet
     >
       <Row style={{padding: 16}}>
         <Col span={24}>
-          <ComicDetailFields comicDetail={comicDetail} />
-          <ComicChapterList comicId={comicDetail.id} chapters={comicDetail.chapters} />
+          <ComicDetailFields comicDetail={comicDetail} loading={loading} />
+          <ComicChapterList comicId={comicDetail.id} chapters={comicDetail.chapters} loading={loading} />
         </Col>
       </Row>
     </div>

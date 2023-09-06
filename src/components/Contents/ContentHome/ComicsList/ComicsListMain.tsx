@@ -1,4 +1,4 @@
-import { Button, Card, List, Row } from "antd"
+import { Button, Card, ConfigProvider, List, Row } from "antd"
 import { Comic, ComicsResponse } from "../../../../types/Comic"
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -14,6 +14,13 @@ import useScreenSize from "../../../../utils/screenWidth";
 type ComicsListMainProps = {
   comicResponse: ComicsResponse,
 }
+
+const customizeRenderEmpty = () => (
+  <div style={{ textAlign: 'center' }}>
+    <LoadingOutlined style={{ fontSize: 48, color: 'white' }} spin />
+    <p>Đang tải truyện</p>
+  </div>
+);
 
 const { Meta } = Card
 export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicResponse}) => {
@@ -45,7 +52,7 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
         dataLength={currentComicList.length}
         next={loadMoreComicList}
         hasMore={ currentComicList.length <= 200 }
-        loader={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+        loader={undefined}
         endMessage={
           <Button 
             loading={loading} 
@@ -59,37 +66,39 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
           </Button>
         }
       >
-        <List
-          grid={isMobile ? { gutter: 0, column: 2 } : { gutter: 8, column: 5 }}
-          dataSource={currentComicList}
-          renderItem={(comic) => (
-            <List.Item key={comic.id + comic.title}>
-              <Link 
-                to={`${getComicDetail(comic.id)}`}
-                style={{
-                  display: "flex", 
-                  justifyContent: 'center', 
-                  alignItems: 'center'
-                }}
-              >
-                <Card
-                  hoverable
-                  style={isMobile ? { width: 180, height: 320} : { width: 200, height: 400 }}
-                  cover={<img height={220} alt={comic.id} src={comic.thumbnail} />}
+        <ConfigProvider renderEmpty={currentComicList.length <= 0 ? customizeRenderEmpty : undefined}>
+          <List
+            grid={isMobile ? { gutter: 0, column: 2 } : { gutter: 8, column: 5 }}
+            dataSource={currentComicList}
+            renderItem={(comic) => (
+              <List.Item key={comic.id + comic.title}>
+                <Link 
+                  to={`${getComicDetail(comic.id)}`}
+                  style={{
+                    display: "flex", 
+                    justifyContent: 'center', 
+                    alignItems: 'center'
+                  }}
                 >
-                  <Meta 
-                    title={<CustomizeTitle title={comic.title} style={{fontSize: isMobile ? 14 : 16}} />} 
-                    description={!isMobile && <CustomizeParagraph value={comic.short_description} limitRow={2} />}
-                  />
-                  <Row justify={'space-between'}>
-                    <CustomizeText style={{color: Palette.Accent}} value={comic.last_chapter.name}/>
-                    <CustomizeText style={{color: Palette.SecondaryText, fontSize: 12}} value={comic.updated_at}/>
-                  </Row>
-                </Card>
-              </Link>
-            </List.Item>
-          )}
-        />
+                  <Card
+                    hoverable
+                    style={isMobile ? { width: 180, height: 320} : { width: 200, height: 400 }}
+                    cover={<img height={220} alt={comic.id} src={comic.thumbnail} />}
+                  >
+                    <Meta 
+                      title={<CustomizeTitle title={comic.title} style={{fontSize: isMobile ? 14 : 16}} />} 
+                      description={!isMobile && <CustomizeParagraph value={comic.short_description} limitRow={2} />}
+                    />
+                    <Row justify={'space-between'}>
+                      <CustomizeText style={{color: Palette.Accent}} value={comic.last_chapter.name}/>
+                      <CustomizeText style={{color: Palette.SecondaryText, fontSize: 12}} value={comic.updated_at}/>
+                    </Row>
+                  </Card>
+                </Link>
+              </List.Item>
+            )}
+          />
+        </ConfigProvider>
       </InfiniteScroll>
     </div>
   );
