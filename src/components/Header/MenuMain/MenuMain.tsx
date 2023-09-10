@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, MenuProps } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { BarsOutlined, FireOutlined, HomeOutlined, StarOutlined } from '@ant-design/icons';
+import { BarsOutlined, FireOutlined, HomeOutlined, MinusCircleOutlined, PlusCircleOutlined, StarOutlined } from '@ant-design/icons';
 import { Genre } from '../../../types/Genres';
 import { BrightColorPalette } from '../../../styles/palette';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
@@ -31,6 +31,16 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
       key: 'new',
       icon: <StarOutlined />,
       label: <Link to={getNewComic()}>Truyện mới</Link>,
+    },
+    {
+      key: 'boy',
+      icon: <PlusCircleOutlined />,
+      label: <Link to={RouteComics.BoyComics}>Boy</Link>,
+    },
+    {
+      key: 'girl',
+      icon: <MinusCircleOutlined />,
+      label: <Link to={RouteComics.GirlComics}>Girl</Link>,
     },
     {
       key: 'genres',

@@ -1,3 +1,7 @@
 .link:hover{
   background-color: aliceblue;
 }
+
+.ant-space-item{
+  height: fit-content;
+}

@@ -2,3 +2,7 @@
   overflow: auto !important;
   height: 500px !important;
 }
+
+.back-button .ant-space-item{
+  height: fit-content;
+}

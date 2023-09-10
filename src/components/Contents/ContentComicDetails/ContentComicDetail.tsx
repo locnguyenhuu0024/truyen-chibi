@@ -2,6 +2,7 @@ import { Col, Row } from "antd";
 import { ComicDetail } from "../../../types/Comic";
 import { ComicDetailFields } from "./ComicDetailFields";
 import { ComicChapterList } from "./ComicChapterList";
+import './index.css'
 
 type ContentComicDetailProps = {
   comicDetail: ComicDetail,

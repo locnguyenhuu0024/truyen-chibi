@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { getComicDetail } from '../../../utils/getRoute';
 import useScreenSize from '../../../utils/screenWidth';
+import { emptyImage } from '../../../types/Route';
 
 type ListSearchedComicProps = {
   listSearchedComic: Comic[]
@@ -37,9 +38,11 @@ export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({l
               <List.Item key={`${index}-${item?.id}`}>
                 <Space direction={isMobile ? 'vertical' : 'horizontal'}>
                   <Image
+                    crossOrigin='anonymous'
                     width={100}
                     src={item?.thumbnail}
                     preview={false}
+                    fallback={emptyImage}
                   />
                   <Space direction='vertical'>
                     <Typography.Title

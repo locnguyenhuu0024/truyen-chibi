@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { ContentHome } from "../components/Contents/ContentHome";
+import { ContentHome } from "../components/Contents";
 import { Content } from "antd/es/layout/layout";
 import { BrightColorPalette as Palette } from "../styles/palette";
 

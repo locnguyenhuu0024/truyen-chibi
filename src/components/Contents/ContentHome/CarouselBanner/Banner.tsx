@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { BrightColorPalette as Palette } from "../../../../styles/palette";
 import { CustomizeParagraph, CustomizeTag, CustomizeText, CustomizeTitle } from "../../../Customizes";
 import useScreenSize from "../../../../utils/screenWidth";
+import { emptyImage } from "../../../../types/Route";
 
 const contentStyle: React.CSSProperties = {
   display: 'flex',
@@ -30,7 +31,7 @@ export const Banner : React.FC<BannerProps> = observer(({comic}) => {
         !isMobile 
           ? <Row justify={'space-around'} align={'top'} style={{width: '100%'}}>
             <Col span={6}>
-              <Image preview={false} style={{width: 200, height: 'auto'}} src={comic?.thumbnail} />
+              <Image preview={false} style={{width: 200, height: 'auto'}} src={comic?.thumbnail} fallback={emptyImage} />
             </Col>
             <Col span={18}>
               <Row justify={'start'}>
@@ -59,7 +60,7 @@ export const Banner : React.FC<BannerProps> = observer(({comic}) => {
           >
             <Row justify={'center'} align={'middle'}>
               <Col>
-                <Image preview={false} style={{width: 200, height: 'auto'}} src={comic?.thumbnail} />
+                <Image preview={false} style={{width: 200, height: 'auto'}} src={comic?.thumbnail} fallback={emptyImage} />
               </Col>
             </Row>
             <Col span={18}>

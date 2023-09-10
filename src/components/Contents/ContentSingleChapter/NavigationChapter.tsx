@@ -28,7 +28,7 @@ export const NavigationChapter : React.FC<NavigationChapterProps> = ({
 
   return (
     <Row justify={'center'} align={'middle'}>
-      <Col span={isMobile ? 6 : 9} style={{height: 36, display: 'flex', justifyContent: 'end', paddingRight: 16}}>
+      <Col span={isMobile ? 6 : 9} style={{display: 'flex', justifyContent: 'end', paddingRight: 16}}>
         <Link to={goToTheChapter('prev') || '#'}>
           <Button 
             icon={<ArrowLeftOutlined />} 
@@ -37,7 +37,7 @@ export const NavigationChapter : React.FC<NavigationChapterProps> = ({
           ></Button>
         </Link>
       </Col>
-      <Col span={isMobile ? 12 : 6} style={{height: 36}}>
+      <Col span={isMobile ? 12 : 6}>
         <Dropdown 
           menu={{items: chapterItems(comicId, chapters)}} 
           trigger={['click']}
@@ -48,7 +48,7 @@ export const NavigationChapter : React.FC<NavigationChapterProps> = ({
           ><CustomizeText value={chapterName} style={{color: Palette.SecondaryText}}/></Button>
         </Dropdown>
       </Col>
-      <Col span={isMobile ? 6 : 9} style={{height: 36, display: 'flex', justifyContent: 'start', paddingLeft: 16}}>
+      <Col span={isMobile ? 6 : 9} style={{display: 'flex', justifyContent: 'start', paddingLeft: 16}}>
         <Link to={goToTheChapter('next') || '#'}>
           <Button 
             icon={<ArrowRightOutlined />} 

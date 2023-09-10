@@ -1,22 +1,26 @@
-import { makeAutoObservable } from 'mobx';
-import { ChapterResponse, Comic, ComicDetail, ComicsResponse, RecommendComic } from '../types/Comic';
-import { getComicDetail, getGenres, getNewComics, getRecentUpdateComics, getRecommendComics, getSingleChapter, getTopComics } from '../apis/comicsApi';
-import { Genre } from '../types/Genres';
+import { makeAutoObservable } from 'mobx'
+import { 
+  ChapterResponse, Comic, 
+  ComicDetail, ComicsResponse, 
+  RecommendComic 
+} from '../types/Comic'
+import * as comicsApi from '../apis/comicsApi'
+import { Genre } from '../types/Genres'
 
 export class ComicStore {
   topComics: ComicsResponse = {
     comics: [],
     total_pages: 0,
     current_page: 0
-  }; 
+  } 
   recentUpdatedComics: ComicsResponse = {
     comics: [],
     total_pages: 0,
     current_page: 0
   }
-  genres: Genre[] | null = null;
-  newComics: Comic[] = [];
-  recommendComics: RecommendComic[] = [];
+  genres: Genre[] | null = null
+  newComics: Comic[] = []
+  recommendComics: RecommendComic[] = []
   comicDetail: ComicDetail = {
     title: '',
     thumbnail: '',
@@ -29,57 +33,77 @@ export class ComicStore {
     chapters: [],
     id: '',
     other_names: []
-  };
+  }
   singleChapter: ChapterResponse = {
     images: [],
     chapters: [],
     chapter_name: '',
     comic_name: ''
   }
+  trendingComics: ComicsResponse = {
+    comics: [],
+    total_pages: 0,
+    current_page: 0
+  }
+  comicsByGenre: ComicsResponse = {
+    comics: [],
+    total_pages: 0,
+    current_page: 0
+  }
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 
   // Comics
   getTopComics = async (page?: number, status?: string) => {
-    const response = await getTopComics(page, status);
-    this.setTopCommics(response);
-  };
+    const response = await comicsApi.getTopComics(page, status)
+    this.setTopCommics(response)
+  }
 
   getNewComics = async (page?: number, status?: string) => {
-    const response = await getNewComics(page, status);
+    const response = await comicsApi.getNewComics(page, status)
     this.setNewComics(response.comics)
   }
 
   getRecommendComics = async () => {
-    const response = await getRecommendComics();
+    const response = await comicsApi.getRecommendComics()
     this.setRecommendComics(response)
   }
 
   getRecentUpdatedComics = async (page?: number) => {
-    const response = await getRecentUpdateComics(page)
+    const response = await comicsApi.getRecentUpdateComics(page)
     this.setRecentUpdatedComics(response)
   }
 
   getComicDetail = async (comicId: string) => {
-    const response = await getComicDetail(comicId)
+    const response = await comicsApi.getComicDetail(comicId)
     this.setComicDetail(response)
   }
 
   getSingleChapter = async (comicId: string, chapterId: string) => {
-    const response = await getSingleChapter(comicId, chapterId)
+    const response = await comicsApi.getSingleChapter(comicId, chapterId)
     this.setChapterResponse(response)
+  }
+
+  getTrendComics = async (page?: number) => {
+    const response = await comicsApi.getTrendingComics(page)
+    this.setTrendingComics(response)
+  }
+
+  getComicsByGenre = async (genre: string) => {
+    const response = await comicsApi.getComicsByGenre(genre)
+    this.setComicsByGenre(response)
   }
 
   // Set
 
   setTopCommics = (topComics : ComicsResponse) => {
-    this.topComics = topComics;
+    this.topComics = topComics
   }
 
   setNewComics = (newComics: Comic[]) => {
-    this.newComics = newComics;
+    this.newComics = newComics
   }
 
   setRecommendComics = (recommendComics: RecommendComic[]) => {
@@ -98,10 +122,18 @@ export class ComicStore {
     this.singleChapter = singleChapter
   }
 
+  setTrendingComics = (trendingComics: ComicsResponse) => {
+    this.trendingComics = trendingComics
+  }
+
+  setComicsByGenre = (comicsByGenre: ComicsResponse) => {
+    this.comicsByGenre = comicsByGenre
+  }
+
   // Genres
   getGenres = async () => {
-    const response = await getGenres();
-    this.setGenres(response);
+    const response = await comicsApi.getGenres()
+    this.setGenres(response)
   }
 
   setGenres = (genres: Genre[] | null) => {
