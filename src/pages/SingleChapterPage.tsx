@@ -4,7 +4,7 @@ import { BrightColorPalette as Palette } from "../styles/palette";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRootStore } from "../stores";
-import { ContentSingleChapter } from "../components/Contents/ContentSingleChapter/ContentSingleChapter";
+import { ContentSingleChapter } from "../components/Contents";
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',

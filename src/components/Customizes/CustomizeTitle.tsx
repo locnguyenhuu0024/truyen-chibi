@@ -3,7 +3,8 @@ import { BrightColorPalette } from "../../styles/palette";
 
 type CustomizeTitleProps = {
   style?: React.CSSProperties,
-  title: string | undefined
+  title: string | undefined,
+  ellipsis?: boolean
 }
 
 const titleStyle: React.CSSProperties = {
@@ -14,8 +15,8 @@ const titleStyle: React.CSSProperties = {
   color: BrightColorPalette.CarouselTitle
 };
 
-export const CustomizeTitle : React.FC<CustomizeTitleProps> = ({style, title}) => {
+export const CustomizeTitle : React.FC<CustomizeTitleProps> = ({style, title, ...props}) => {
   return (
-    <Title style={{...titleStyle, ...style}}>{title}</Title>
+    <Title style={{...titleStyle, ...style}} {...props}>{title}</Title>
   )
 }

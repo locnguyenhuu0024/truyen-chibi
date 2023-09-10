@@ -1,19 +1,22 @@
 import { Button, Card, ConfigProvider, Image, List, Row } from "antd"
-import { Comic, ComicsResponse } from "../../../../types/Comic"
+import { Comic, ComicsResponse } from "../../types/Comic"
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { LoadingOutlined } from "@ant-design/icons";
-import { CustomizeParagraph, CustomizeText, CustomizeTitle } from "../../../Customizes";
-import { BrightColorPalette as Palette } from "../../../../styles/palette";
+import { CustomizeParagraph, CustomizeText, CustomizeTitle } from ".";
+import { BrightColorPalette as Palette } from "../../styles/palette";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
-import { useRootStore } from "../../../../stores";
-import { getComicDetail } from "../../../../utils/getRoute";
-import useScreenSize from "../../../../utils/screenWidth";
-import { emptyImage } from "../../../../types/Route";
+import { getComicDetail } from "../../utils/getRoute";
+import useScreenSize from "../../utils/screenWidth";
+import { emptyImage } from "../../types/Route";
 
-type ComicsListMainProps = {
-  comicResponse: ComicsResponse,
+type CustomizeComicsInfinityListProps = {
+  comicResponse?: ComicsResponse,
+  comics?: Comic[],
+  getComicList?: (page?: number, status?: string) => Promise<void>
+  loading?: boolean,
+  needToLoad?: boolean
 }
 
 const customizeRenderEmpty = () => (
@@ -24,12 +27,13 @@ const customizeRenderEmpty = () => (
 );
 
 const { Meta } = Card
-export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicResponse}) => {
+export const CustomizeComicsInfinityList : React.FC<CustomizeComicsInfinityListProps> = observer(({
+  comicResponse, 
+  getComicList, 
+  loading,
+  needToLoad
+}) => {
   const { isMobile } = useScreenSize()
-  const {comicStore} = useRootStore()
-  const {getRecentUpdatedComics} = comicStore;
-
-  const [loading, setLoading] = useState<boolean>(false);
   const [currentComicList, setCurrentComicList] = useState<Comic[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
 
@@ -37,21 +41,19 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
     if (loading) {
       return;
     }
-    setLoading(true);
-    await getRecentUpdatedComics(currentPage + 1)
-    setLoading(false)
+    await getComicList!(currentPage + 1)
   };
 
   useEffect(() => {
-    setCurrentComicList(prev => [...prev, ...comicResponse.comics])
-    setCurrentPage(comicResponse.current_page)
+    setCurrentComicList(prev => [...prev, ...comicResponse!.comics])
+    setCurrentPage(comicResponse!.current_page)
   }, [comicResponse])
 
   return (
     <div>
       <InfiniteScroll
         dataLength={currentComicList.length}
-        next={loadMoreComicList}
+        next={needToLoad ? loadMoreComicList : () => {}}
         hasMore={ currentComicList.length <= 200 }
         loader={undefined}
         endMessage={
@@ -60,6 +62,7 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
             onClick={loadMoreComicList} 
             type='primary' 
             ghost
+            disabled={needToLoad}
           >
             {
               loading ? 'Đang tải....' : 'Tải thêm truyện'
@@ -84,12 +87,7 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
                   <Card
                     hoverable
                     style={isMobile ? { width: 180, height: 320} : { width: 200, height: 400 }}
-                    cover={<Image 
-                      height={220} 
-                      alt={comic.id} 
-                      src={comic.thumbnail} 
-                      fallback={emptyImage}
-                    />}
+                    cover={<Image height={220} alt={comic.id} src={comic.thumbnail} fallback={emptyImage} />}
                   >
                     <Meta 
                       title={<CustomizeTitle title={comic.title} style={{fontSize: isMobile ? 14 : 16}} />} 

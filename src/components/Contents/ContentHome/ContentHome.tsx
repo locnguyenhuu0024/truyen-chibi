@@ -6,30 +6,27 @@ import { useEffect } from "react";
 import { useRootStore } from "../../../stores";
 
 
-
 export const ContentHome : React.FC = observer(() => {
   const {comicStore} = useRootStore()
   const {
-    // recommendComics, 
     recentUpdatedComics, 
-    newComics,
-    // getRecommendComics,
-    getNewComics,
+    trendingComics,
+    getTrendComics,
     getRecentUpdatedComics
   } = comicStore;
 
   useEffect(() => {
     recentUpdatedComics.comics.length <= 0 && getRecentUpdatedComics(1)
     // getRecommendComics();
-    newComics.length <= 0 && getNewComics(1);
+    trendingComics.comics.length <= 0 && getTrendComics(1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
-      <Divider>Truyện mới ra</Divider>
-      <CarouselBanner comics={newComics} />
-      <Divider>TRUYỆN VỪA CẬP NHẬT</Divider>
+      <Divider><strong>TRUYỆN NỔI BẬT</strong></Divider>
+      <CarouselBanner comicsResponse={trendingComics} />
+      <Divider><strong>TRUYỆN VỪA CẬP NHẬT</strong></Divider>
       <ComicsListMain comicResponse={recentUpdatedComics} />
     </div>
   )

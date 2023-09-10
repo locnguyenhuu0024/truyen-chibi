@@ -9,9 +9,9 @@ const comicsApi = axios.create({
 });
 
 
-export const trendingComics = (page?: number) => {
+export const getTrendingComics = (page?: number) => {
   return comicsApi
-    .get('/trending-comics', { params: { page } })
+    .get<ComicsResponse>('/trending-comics', { params: { page } })
     .then(response => response.data)
     .catch(error => {
       throw error;
@@ -29,7 +29,7 @@ export const getGenres = () => {
 
 export const getComicsByGenre = (genreId: string) => {
   return comicsApi
-    .get(`/genres/${genreId}`)
+    .get<ComicsResponse>(`/genres/${genreId}`)
     .then(response => response.data)
     .catch(error => {
       throw error;

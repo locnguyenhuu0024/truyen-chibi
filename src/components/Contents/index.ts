@@ -1,2 +1,5 @@
 export * from './ContentHome'
 export * from './ContentComicDetails'
+export * from './ContentTrendingComics'
+export * from './ContentSingleChapter'
+export * from './ContentComicsByGenre'

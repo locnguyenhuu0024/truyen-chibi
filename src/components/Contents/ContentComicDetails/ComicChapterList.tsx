@@ -14,6 +14,14 @@ type ComicChapterListProps = {
 export const ComicChapterList : React.FC<ComicChapterListProps> = ({comicId, chapters, loading}) => {
   return (
     <>
+      <Space size={'small'} direction='horizontal'>
+        <Link to={getSingleChapterPath(comicId, chapters[chapters?.length-1]?.id)}>
+          <Button danger ghost>Đọc từ đầu</Button>
+        </Link>
+        <Link to={getSingleChapterPath(comicId, chapters[0]?.id)}>
+          <Button type='primary' danger>Chương mới nhất</Button>
+        </Link>
+      </Space>
       <Divider>
         <Space direction='vertical'>
           <div>Danh sách chương</div>

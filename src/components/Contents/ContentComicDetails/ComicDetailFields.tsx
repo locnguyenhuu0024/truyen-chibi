@@ -1,9 +1,9 @@
 import { Col, Row, Image, Descriptions, Space, Button, DescriptionsProps, Skeleton } from "antd"
 import { CustomizeParagraph, CustomizeTag, CustomizeText, CustomizeTitle } from "../../Customizes"
 import { EyeOutlined, UserAddOutlined } from "@ant-design/icons"
-import { BrightColorPalette as Palette } from "../../../styles/palette";
 import { ComicDetail, StatusEnums } from "../../../types/Comic";
 import useScreenSize from "../../../utils/screenWidth";
+import { emptyImage } from "../../../types/Route";
 
 type ComicDetailFieldsProps = {
   comicDetail: ComicDetail,
@@ -12,6 +12,12 @@ type ComicDetailFieldsProps = {
 
 const returnItems = (comicDetail: ComicDetail): DescriptionsProps['items'] => ([
   {
+    key: 'otherName',
+    label: 'Tên khác',
+    children: comicDetail.other_names.map((otherName, index) => <CustomizeText key={index} value={otherName}/>),
+    span: 3
+  },
+  {
     key: 'author',
     label: 'Tác giả',
     children: comicDetail.authors,
@@ -19,12 +25,8 @@ const returnItems = (comicDetail: ComicDetail): DescriptionsProps['items'] => ([
   {
     key: 'status',
     label: 'Trạng thái',
-    children: comicDetail.status === 'Completed' ? StatusEnums.Completed : StatusEnums.OnGoing
-  },
-  {
-    key: '',
-    label: null,
-    children: null
+    children: comicDetail.status === 'Completed' ? StatusEnums.Completed : StatusEnums.OnGoing,
+    span: 2
   },
   {
     key: 'genres',
@@ -32,32 +34,29 @@ const returnItems = (comicDetail: ComicDetail): DescriptionsProps['items'] => ([
     children: (
       <Row justify={'start'} align={'middle'}>
         {
-          comicDetail.genres.map(genre => <Col key={genre.id}>
-            <CustomizeTag genre={genre} />
-          </Col>)
+          comicDetail.genres.map(genre => 
+            <Col key={genre.id}>
+              <CustomizeTag genre={genre} />
+            </Col>
+          )
         }
       </Row>
-    )
-  },
-  {
-    key: '',
-    label: null,
-    children: null
-  },
-  {
-    key: '',
-    label: null,
-    children: null
+    ),
+    span: 3
   },
   {
     key: 'description',
     label: 'Mô tả',
-    children: <CustomizeParagraph value={comicDetail.description} />
+    children: <CustomizeParagraph value={comicDetail.description} />,
+    span: 3
   },
 ]);
 
 export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = ({comicDetail, loading}) => {
   const { isMobile } = useScreenSize()
+  const { 
+    id, thumbnail, title, total_views, followers 
+  } = comicDetail
   
   return (
     !isMobile 
@@ -65,76 +64,35 @@ export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = ({comicDetai
       <Skeleton loading={loading} title paragraph active avatar>
         <Row>
           <Col span={8}>
-            <Image alt={comicDetail.id} src={comicDetail.thumbnail} width={280} height={400} preview={false} />
+            <Image alt={id} src={thumbnail} width={280} height={400} preview={false} fallback={emptyImage} />
           </Col>
           <Col span={16}>
             <Descriptions
-              title={<Row justify={'start'}><Col span={24}>
-                <CustomizeTitle title={comicDetail.title} />
-                {
-                  comicDetail.other_names.length > 0 && !isMobile
-                    && <CustomizeText 
-                      style={{width: '100%', color: Palette.SecondaryText}} 
-                      value='Tên khác: ' 
-                    />
-                }
-                <Space style={{width: '100%', textAlign: 'start'}} direction="vertical">
-                  {
-                    isMobile && <CustomizeText 
-                      style={{width: '100%', color: Palette.SecondaryText}} 
-                      value='Tên khác: ' 
-                    />
-                  }
-                  {
-                    comicDetail.other_names.map(otherName => (
-                      <>
-                        <CustomizeText key={otherName} style={{color: Palette.SecondaryText}} value={otherName} />
-                      </>
-                    ))
-                  }
-                </Space>
-              </Col></Row>}
+              title={<CustomizeTitle title={title} ellipsis={true} />}
               size={'small'}
               items={returnItems(comicDetail)}
-              // layout="vertical"
-              column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
               extra={<Space>
-                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{` ${comicDetail.total_views}`}</Button>
-                <Button icon={<UserAddOutlined />} type='default' ghost danger disabled>{` ${comicDetail.followers}`}</Button>
+                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{` ${total_views}`}</Button>
+                <Button icon={<UserAddOutlined />} type='default' ghost danger disabled>{` ${followers}`}</Button>
               </Space>}
-              // bordered
             />
           </Col>
         </Row>
       </Skeleton>
       : 
       <Skeleton loading={loading} active avatar>
-        <Space direction="vertical">
-          <Image alt={comicDetail.id} src={comicDetail.thumbnail} width={180} height={280} preview={false} />
+        <Space direction="vertical" style={{width: '100%'}}>
+          <Image alt={id} src={thumbnail} width={180} height={280} preview={false} fallback={emptyImage} />
           <Descriptions
             title={<Row justify={'start'}><Col span={24}>
-              <CustomizeTitle title={comicDetail.title} />
+              <CustomizeTitle title={title} ellipsis={true} />
               <Space>
-                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{` ${comicDetail.total_views}`}</Button>
-                <Button icon={<UserAddOutlined />} type='default' ghost danger disabled>{` ${comicDetail.followers}`}</Button>
-              </Space>
-              {
-                comicDetail.other_names.length > 0 
-        && <CustomizeText style={{width: '100%', color: Palette.SecondaryText}} value='Tên khác: ' />
-              }
-              <Space style={{width: '100%', textAlign: 'start'}} direction="vertical">
-                {
-                  comicDetail.other_names.map(otherName => (
-                    <>
-                      <CustomizeText key={otherName} style={{color: Palette.SecondaryText}} value={otherName} />
-                    </>
-                  ))
-                }
+                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{` ${total_views}`}</Button>
+                <Button icon={<UserAddOutlined />} type='default' ghost danger disabled>{` ${followers}`}</Button>
               </Space>
             </Col></Row>}
             size={'small'}
             items={returnItems(comicDetail)}
-            column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
           />
         </Space>
       </Skeleton>

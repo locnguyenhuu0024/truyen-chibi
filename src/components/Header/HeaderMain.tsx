@@ -13,6 +13,7 @@ import { MenuMain } from "./MenuMain/MenuMain"
 import useScreenSize from "../../utils/screenWidth"
 import { Button, Drawer } from "antd"
 import { EllipsisOutlined } from "@ant-design/icons"
+import { Link } from "react-router-dom"
 
 const headerStyle = {
   backgroundColor: BrightColorPalette.Primary
@@ -50,7 +51,9 @@ export const HeaderMain : React.FC = observer(() => {
     <Header style={headerStyle}>
       <Row>
         <Col span={isMobile ? 12 : 2}>
-          <strong>Truyện Chibi</strong>
+          <Link to={'/'}>
+            <strong>Truyện Chibi</strong>
+          </Link>
         </Col>
         {
           !isMobile 
