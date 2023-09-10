@@ -2,6 +2,8 @@ import { Avatar, Button, Col, Popover, Row, Space, Typography } from "antd"
 import { UserOptionList } from "./UserOptionList"
 import { User } from "../../../../types/User"
 import { observer } from "mobx-react-lite"
+import { BrightColorPalette } from "../../../../styles/palette"
+import useScreenSize from "../../../../utils/screenWidth"
 
 type UserFieldProps = {
   user: User | null,
@@ -9,6 +11,7 @@ type UserFieldProps = {
 }
 
 export const UserField : React.FC<UserFieldProps> = observer(({user, logout}) => {
+  const { isMobile } = useScreenSize()
   return (
     <Row justify={'end'} align={'middle'} style={{width: '100%', height: '100%'}}>
       <Col>
@@ -25,6 +28,7 @@ export const UserField : React.FC<UserFieldProps> = observer(({user, logout}) =>
             type="default" 
             onClick={() => {}}
             ghost
+            style={{borderColor: isMobile ? BrightColorPalette.Accent : 'white'}}
           >
             <Space size={'middle'}>
               <Avatar src={user?.photoURL}>{!user?.photoURL ? user?.email?.charAt(0).toUpperCase() : <></>}</Avatar>
