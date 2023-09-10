@@ -6,7 +6,7 @@ import { searchComics } from "../../apis/comicsApi"
 import { useEffect, useState } from "react"
 import { Comic } from "../../types/Comic"
 import './header.css'
-import { AuthenField, UserField } from "./RightFields"
+import { AuthenOnlyGoogleField, UserField } from "./RightFields"
 import { observer } from "mobx-react-lite"
 import { useRootStore } from "../../stores"
 import { MenuMain } from "./MenuMain/MenuMain"
@@ -70,7 +70,7 @@ export const HeaderMain : React.FC = observer(() => {
               <Col span={4}>
                 {
                   !user
-                    ? <AuthenField />
+                    ? <AuthenOnlyGoogleField />
                     : <UserField user={user} logout={logout}/>
                 }
               </Col>
@@ -90,7 +90,7 @@ export const HeaderMain : React.FC = observer(() => {
                       <Col>
                         {
                           !user
-                            ? <AuthenField />
+                            ? <AuthenOnlyGoogleField />
                             : <UserField user={user} logout={logout}/>
                         }
                       </Col>
