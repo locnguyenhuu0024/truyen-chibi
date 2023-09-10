@@ -29,7 +29,8 @@ const useScreenSize = () => {
       setIsTablet(false);
       setIsLargeScreen(true);
     }
-  }, [screenWidth, document.documentElement.clientWidth, document.body.clientWidth]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     isMobile,
