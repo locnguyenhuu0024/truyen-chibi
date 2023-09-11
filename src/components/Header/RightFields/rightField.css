@@ -3,8 +3,19 @@
   color: #FFFFFF;
 }
 
+.button.login-google {
+  background-color: #FF4081 !important; /* BrightColorPalette.Accent */
+  color: #FFFFFF;
+}
+
 .button.login:hover {
   border-color: #FFFFFF !important;
+  color: #FF4081 !important; /* BrightColorPalette.Hover */
+}
+
+.button.login-google:hover {
+  border-color: #FF4081 !important;
+  background-color: #FFFFFF !important;
   color: #FF4081 !important; /* BrightColorPalette.Hover */
 }
 
