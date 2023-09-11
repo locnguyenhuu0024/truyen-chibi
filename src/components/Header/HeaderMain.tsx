@@ -11,7 +11,7 @@ import { observer } from "mobx-react-lite"
 import { useRootStore } from "../../stores"
 import { MenuMain } from "./MenuMain/MenuMain"
 import useScreenSize from "../../utils/screenWidth"
-import { Button, Drawer } from "antd"
+import { Button, Drawer, Image } from "antd"
 import { EllipsisOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom"
 
@@ -52,7 +52,7 @@ export const HeaderMain : React.FC = observer(() => {
       <Row>
         <Col span={isMobile ? 12 : 2}>
           <Link to={'/'}>
-            <strong>Truyện Chibi</strong>
+            <Image className="logo" src='/truyen-chibi-ss.svg' alt="logo" height={64} preview={false}/>
           </Link>
         </Col>
         {
@@ -77,7 +77,13 @@ export const HeaderMain : React.FC = observer(() => {
             </>
             : <>
               <Col span={8}></Col>
-              <Col span={4} style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
+              <Col span={4} style={{
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                flexDirection: 'column',
+                height: '64px !important'
+              }}>
                 <Button 
                   icon={<EllipsisOutlined />} 
                   onClick={() => setOpen(true)}
@@ -86,7 +92,11 @@ export const HeaderMain : React.FC = observer(() => {
                 <Drawer
                   title={
                     <Row justify={'space-between'} align={'middle'}>
-                      <Col><strong>Truyện Chibi</strong></Col>
+                      <Col>
+                        <Link to={'/'}>
+                          <Image className="logo" src='/truyen-chibi-ss.svg' alt="logo" height={64} preview={false}/>
+                        </Link>
+                      </Col>
                       <Col>
                         {
                           !user
@@ -100,6 +110,7 @@ export const HeaderMain : React.FC = observer(() => {
                   onClose={() => setOpen(false)}
                   open={open}
                   key={'left'}
+                  style={{backgroundColor: BrightColorPalette.LightBackground}}
                 >
                   <HeaderSearchBar 
                     onSearch={onSearch}

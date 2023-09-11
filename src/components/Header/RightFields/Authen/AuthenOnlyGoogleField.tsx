@@ -1,15 +1,12 @@
 import { Button, Modal, Row } from "antd"
-import { BrightColorPalette } from "../../../../styles/palette"
 import '../rightField.css'
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
-import useScreenSize from "../../../../utils/screenWidth";
 import { AuthenGoogleForm } from "./AuthenGoogleForm";
 import { useRootStore } from "../../../../stores";
 import { CustomizeTitle } from "../../../Customizes";
 
 export const AuthenOnlyGoogleField : React.FC = observer(() => {
-  const { isMobile } = useScreenSize()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const {authStore} = useRootStore()
   const { loginWithGoogle } = authStore
@@ -23,13 +20,12 @@ export const AuthenOnlyGoogleField : React.FC = observer(() => {
   };
   
   return (
-    <Row justify={'end'} align={'middle'}>
+    <Row justify={'end'} align={'middle'} style={{height: 64}}>
       <Button 
-        className="button login"
+        className="button login-google"
         type="default" 
         ghost
         onClick={showModal}
-        style={{color: isMobile ? BrightColorPalette.Accent : 'white'}}
       >Đăng nhập</Button>
       <Modal 
         open={isModalOpen} 

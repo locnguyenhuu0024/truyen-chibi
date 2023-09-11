@@ -3,3 +3,8 @@ body {
   margin: 0px;
   background-color: #E0F2F1; /* BrightColorPalette.Background */
 }
+
+.ant-col:has(img.logo){
+  height: fit-content !important;
+  line-height: normal;
+}
