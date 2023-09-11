@@ -45,8 +45,11 @@ export const CustomizeComicsInfinityList : React.FC<CustomizeComicsInfinityListP
   };
 
   useEffect(() => {
+    if(comicResponse?.comics[0]?.id === currentComicList[0]?.id) return
+
     setCurrentComicList(prev => [...prev, ...comicResponse!.comics])
     setCurrentPage(comicResponse!.current_page)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comicResponse])
 
   return (
@@ -62,7 +65,7 @@ export const CustomizeComicsInfinityList : React.FC<CustomizeComicsInfinityListP
             onClick={loadMoreComicList} 
             type='primary' 
             ghost
-            disabled={needToLoad}
+            disabled={!needToLoad}
           >
             {
               loading ? 'Đang tải....' : 'Tải thêm truyện'
