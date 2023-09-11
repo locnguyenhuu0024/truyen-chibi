@@ -17,7 +17,12 @@ export const ContentTrendingComics : React.FC<ContentTrendingComicsProps> = obse
   return (
     <>
       <Divider>TRUYỆN TRENDING</Divider>
-      <CustomizeComicsInfinityList comicResponse={comicResponse} getComicList={getTrendingComics} loading={loading} />
+      <CustomizeComicsInfinityList 
+        comicResponse={comicResponse} 
+        getComicList={getTrendingComics} 
+        loading={loading} 
+        needToLoad={true}
+      />
     </>
   )
 })
