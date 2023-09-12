@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { 
-  ChapterResponse, Comic, 
+  ChapterResponse, 
   ComicDetail, ComicsResponse, 
   RecommendComic 
 } from '../types/Comic'
@@ -19,7 +19,11 @@ export class ComicStore {
     current_page: 0
   }
   genres: Genre[] | null = null
-  newComics: Comic[] = []
+  newComics: ComicsResponse = {
+    comics: [],
+    total_pages: 0,
+    current_page: 0
+  }
   recommendComics: RecommendComic[] = []
   comicDetail: ComicDetail = {
     title: '',
@@ -50,6 +54,16 @@ export class ComicStore {
     total_pages: 0,
     current_page: 0
   }
+  boyComics: ComicsResponse = {
+    comics: [],
+    total_pages: 0,
+    current_page: 0
+  }
+  girlComics: ComicsResponse = {
+    comics: [],
+    total_pages: 0,
+    current_page: 0
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -63,7 +77,7 @@ export class ComicStore {
 
   getNewComics = async (page?: number, status?: string) => {
     const response = await comicsApi.getNewComics(page, status)
-    this.setNewComics(response.comics)
+    this.setNewComics(response)
   }
 
   getRecommendComics = async () => {
@@ -96,13 +110,23 @@ export class ComicStore {
     this.setComicsByGenre(response)
   }
 
+  getBoyComics = async (page?: number) => {
+    const response = await comicsApi.getBoyComics(page)
+    this.setBoyComics(response)
+  }
+
+  getGirlComics = async (page?: number) => {
+    const response = await comicsApi.getGirlComics(page)
+    this.setGirlComics(response)
+  }
+
   // Set
 
   setTopCommics = (topComics : ComicsResponse) => {
     this.topComics = topComics
   }
 
-  setNewComics = (newComics: Comic[]) => {
+  setNewComics = (newComics: ComicsResponse) => {
     this.newComics = newComics
   }
 
@@ -128,6 +152,14 @@ export class ComicStore {
 
   setComicsByGenre = (comicsByGenre: ComicsResponse) => {
     this.comicsByGenre = comicsByGenre
+  }
+
+  setBoyComics = (boyComics: ComicsResponse) => {
+    this.boyComics = boyComics
+  }
+
+  setGirlComics = (girlComics: ComicsResponse) => {
+    this.girlComics = girlComics
   }
 
   // Genres
