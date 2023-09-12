@@ -13,8 +13,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Router>
       <RootStoreContext.Provider value={rootStore}>
         <App />
-        <Analytics />
       </RootStoreContext.Provider>
     </Router>
+    <Analytics />
   </React.StrictMode>,
 )
