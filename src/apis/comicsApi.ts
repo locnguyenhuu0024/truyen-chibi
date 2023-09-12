@@ -74,7 +74,7 @@ export const getNewComics = (page?: number, status?: string) => {
 
 export const getBoyComics = (page?: number) => {
   return comicsApi
-    .get('/boy-comics', { params: { page } })
+    .get<ComicsResponse>('/boy-comics', { params: { page } })
     .then(response => response.data)
     .catch(error => {
       throw error;
@@ -83,7 +83,7 @@ export const getBoyComics = (page?: number) => {
 
 export const getGirlComics = (page?: number) => {
   return comicsApi
-    .get('/girl-comics', { params: { page } })
+    .get<ComicsResponse>('/girl-comics', { params: { page } })
     .then(response => response.data)
     .catch(error => {
       throw error;

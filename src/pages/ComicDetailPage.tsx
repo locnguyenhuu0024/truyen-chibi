@@ -23,7 +23,7 @@ export const ComicDetailPage : React.FC = observer(() => {
   useEffect(() => {
     if(!comicId) return;
     getComicDetail(comicId)
-    setTimeout(() => {setLoading(false)}, 3000)
+    setTimeout(() => {setLoading(false)}, 2000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comicId])
   

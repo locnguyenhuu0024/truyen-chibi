@@ -12,6 +12,9 @@ import { SingleChapterPage } from "./SingleChapterPage";
 import useScreenSize from "../utils/screenWidth";
 import { TrendingComicsPage } from "./TrendingComicsPage";
 import { ComicsByGenrePage } from "./ComicsByGenrePage";
+import { NewComicsPage } from "./NewComicsPage";
+import { BoyComicsPage } from "./BoyComicsPage";
+import { GirlComicsPage } from "./GirlComicsPage";
 
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -33,8 +36,9 @@ export const IndexPage : React.FC = observer(() => {
         <Route path={RouteComics.SingleChapter} Component={SingleChapterPage} />
         <Route path={RouteComics.Trending} Component={TrendingComicsPage} />
         <Route path={RouteComics.ComicsByGenre} Component={ComicsByGenrePage} />
-        <Route path={RouteComics.GirlComics} Component={TrendingComicsPage} />
-        <Route path={RouteComics.BoyComics} Component={TrendingComicsPage} />
+        <Route path={RouteComics.NewComics} Component={NewComicsPage} />
+        <Route path={RouteComics.GirlComics} Component={GirlComicsPage} />
+        <Route path={RouteComics.BoyComics} Component={BoyComicsPage} />
       </Routes>
       {
         !isMobile ? <Sider style={siderStyle}></Sider> : <></>

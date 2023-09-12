@@ -24,7 +24,7 @@ export const SingleChapterPage : React.FC = observer(() => {
     if(!comicId || !chapterId) return;
     setLoading(true)
     getSingleChapter(comicId, chapterId!)
-    setTimeout(() => {setLoading(false)}, 3000)
+    setTimeout(() => {setLoading(false)}, 1000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comicId, chapterId])
 

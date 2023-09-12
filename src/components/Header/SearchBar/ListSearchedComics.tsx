@@ -38,7 +38,6 @@ export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({l
               <List.Item key={`${index}-${item?.id}`}>
                 <Space direction={isMobile ? 'vertical' : 'horizontal'}>
                   <Image
-                    crossOrigin='anonymous'
                     width={100}
                     src={item?.thumbnail}
                     preview={false}

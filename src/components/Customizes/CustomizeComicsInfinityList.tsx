@@ -1,5 +1,5 @@
 import { Button, Card, ConfigProvider, Image, List, Row } from "antd"
-import { Comic, ComicsResponse } from "../../types/Comic"
+import { Comic, ComicsResponse, } from "../../types/Comic"
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -16,7 +16,8 @@ type CustomizeComicsInfinityListProps = {
   comics?: Comic[],
   getComicList?: (page?: number, status?: string) => Promise<void>
   loading?: boolean,
-  needToLoad?: boolean
+  needToLoad?: boolean,
+  status?: 'OnGoing' | 'Completed'
 }
 
 const customizeRenderEmpty = () => (
@@ -31,7 +32,8 @@ export const CustomizeComicsInfinityList : React.FC<CustomizeComicsInfinityListP
   comicResponse, 
   getComicList, 
   loading,
-  needToLoad
+  needToLoad,
+  status
 }) => {
   const { isMobile } = useScreenSize()
   const [currentComicList, setCurrentComicList] = useState<Comic[]>([])
@@ -41,7 +43,7 @@ export const CustomizeComicsInfinityList : React.FC<CustomizeComicsInfinityListP
     if (loading) {
       return;
     }
-    await getComicList!(currentPage + 1)
+    await getComicList!(currentPage + 1, status)
   };
 
   useEffect(() => {

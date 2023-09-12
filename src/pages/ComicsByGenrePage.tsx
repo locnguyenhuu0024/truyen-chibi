@@ -41,10 +41,10 @@ export const ComicsByGenrePage : React.FC = observer(() => {
       setLoading(true)
       getComicsByGenre(genreId)
       setCurrentGenre(genreId)
-      const timeOutLoading = setTimeout(() => {setLoading(false)}, 3000)
+      const timeOutLoading = setTimeout(() => {setLoading(false)}, 1000)
       clearTimeout(timeOutLoading)
     }else{
-      setTimeout(() => {setLoading(false)}, 3000)
+      setTimeout(() => {setLoading(false)}, 1000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [genreId, currentGenreId])

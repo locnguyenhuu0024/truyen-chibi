@@ -41,7 +41,7 @@ export const CustomizeComicsList : React.FC<CustomizeComicsListProps> = ({comics
               <Card
                 hoverable
                 style={isMobile ? { width: 180, height: 320} : { width: 200, height: 400 }}
-                cover={<Image height={220} alt={comic.id} src={comic.thumbnail} fallback={emptyImage} />}
+                cover={<Image height={220} alt={comic.id} src={comic.thumbnail} fallback={emptyImage} preview={false} />}
               >
                 <Meta 
                   title={<CustomizeTitle title={comic.title} style={{fontSize: isMobile ? 14 : 16}} />} 
