@@ -1,5 +1,4 @@
 import { ComicsResponse } from "../../../types/Comic"
-import useScreenSize from "../../../utils/screenWidth"
 import { CustomizeComicsList } from "../../Customizes/CustomizeComicsList"
 
 type ContentComicsByGenreProps = {
@@ -13,10 +12,9 @@ export const ContentComicsByGenre : React.FC<ContentComicsByGenreProps> = ({
   loading, 
 }) => {
   const {comics} = comicsResponse
-  const {isMobile} = useScreenSize()
   return (
     <>
-      <CustomizeComicsList comics={comics} isMobile={isMobile} loading={loading} />
+      <CustomizeComicsList comics={comics} loading={loading} />
     </>
   )
 }

@@ -11,7 +11,8 @@ import useScreenSize from '../../../utils/screenWidth';
 import { emptyImage } from '../../../types/Route';
 
 type ListSearchedComicProps = {
-  listSearchedComic: Comic[]
+  listSearchedComic: Comic[],
+  onClickItemMenu?: () => void
 }
 
 const scrollStyle = {
@@ -22,7 +23,10 @@ const scrollStyle = {
   border: '1px solid rgba(140, 140, 140, 0.35)',
 }
 
-export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({listSearchedComic}) => {
+export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({
+  listSearchedComic,
+  onClickItemMenu
+}) => {
   const { isMobile } = useScreenSize()
 
   return (
@@ -34,7 +38,7 @@ export const ListSearchedComic : React.FC<ListSearchedComicProps> = observer(({l
           itemLayout="horizontal"
           dataSource={listSearchedComic}
           renderItem={(item, index) => (
-            <Link key={`${index}-${item?.id}`} to={getComicDetail(item.id)}>
+            <Link key={`${index}-${item?.id}`} to={getComicDetail(item.id)} onClick={onClickItemMenu}>
               <List.Item key={`${index}-${item?.id}`}>
                 <Space direction={isMobile ? 'vertical' : 'horizontal'}>
                   <Image
