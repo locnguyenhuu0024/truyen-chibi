@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /private/
+Disallow: /admin/
+Disallow: /search/
+Disallow: /search-suggest/
+Disallow: /top/follow/
+Disallow: /top/comment/
