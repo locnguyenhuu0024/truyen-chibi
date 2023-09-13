@@ -25,13 +25,15 @@ const customizeRenderEmpty = () => (
 
 const { Meta } = Card
 export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicResponse}) => {
-  const { isMobile } = useScreenSize()
+  const { isMobile, isTablet } = useScreenSize()
   const {comicStore} = useRootStore()
   const {getRecentUpdatedComics} = comicStore;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [currentComicList, setCurrentComicList] = useState<Comic[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
+
+  const responsiveGrid = isMobile ? { gutter: 0, column: 2 } : isTablet ? { gutter: 8, column: 3 } : { gutter: 8, column: 5 }
 
   const loadMoreComicList = async () => {
     if (loading) {
@@ -69,7 +71,7 @@ export const ComicsListMain : React.FC<ComicsListMainProps> = observer(({comicRe
       >
         <ConfigProvider renderEmpty={currentComicList.length <= 0 ? customizeRenderEmpty : undefined}>
           <List
-            grid={isMobile ? { gutter: 0, column: 2 } : { gutter: 8, column: 5 }}
+            grid={responsiveGrid}
             dataSource={currentComicList}
             renderItem={(comic) => (
               <List.Item key={comic.id + comic.title}>

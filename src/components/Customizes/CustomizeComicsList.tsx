@@ -7,10 +7,10 @@ import { getComicDetail } from "../../utils/getRoute";
 import { Comic } from "../../types/Comic";
 import { LoadingOutlined } from "@ant-design/icons";
 import { emptyImage } from "../../types/Route";
+import useScreenSize from "../../utils/screenWidth";
 
 type CustomizeComicsListProps = {
   comics: Comic[],
-  isMobile: boolean,
   loading: boolean
 }
 
@@ -21,11 +21,14 @@ const customizeRenderEmpty = () => (
   </div>
 );
 
-export const CustomizeComicsList : React.FC<CustomizeComicsListProps> = ({comics, isMobile, loading}) => {
+export const CustomizeComicsList : React.FC<CustomizeComicsListProps> = ({comics, loading}) => {
+  const {isMobile, isTablet} = useScreenSize()
+  const responsiveGrid = isMobile ? { gutter: 0, column: 2 } : isTablet ? { gutter: 8, column: 3 } : { gutter: 8, column: 5 }
+
   return (
     <ConfigProvider renderEmpty={comics.length <= 0 ? customizeRenderEmpty : undefined}>
       <List
-        grid={isMobile ? { gutter: 0, column: 2 } : { gutter: 8, column: 5 }}
+        grid={responsiveGrid}
         dataSource={comics}
         loading={loading}
         renderItem={(comic) => (

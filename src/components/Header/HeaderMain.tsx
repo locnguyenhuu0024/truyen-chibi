@@ -21,7 +21,7 @@ const headerStyle = {
 
 export const HeaderMain : React.FC = observer(() => {
   const { authStore, comicStore } = useRootStore();
-  const { isMobile } = useScreenSize()
+  const { isMobile, isTablet } = useScreenSize()
   const { user, logout } = authStore
   const { genres, getGenres } = comicStore
 
@@ -49,34 +49,18 @@ export const HeaderMain : React.FC = observer(() => {
 
   return(
     <Header style={headerStyle}>
-      <Row>
-        <Col span={isMobile ? 12 : 2}>
+      <Row align={'middle'}>
+        <Col span={isMobile ? 4 : 2}>
           <Link to={'/'}>
             <Image className="logo" src='/truyen-chibi-ss.svg' alt="logo" height={64} preview={false}/>
           </Link>
         </Col>
         {
-          !isMobile 
+          isMobile 
             ? <>
-              <Col span={13}>
-                <MenuMain genres={genres} onClickItemMenu={onClickItemMenu} />
+              <Col span={16}>
+                <MenuMain genres={genres} onClickItemMenu={onClickItemMenu} isOnHeader={true} />
               </Col>
-              <Col span={5}>
-                <HeaderSearchBar 
-                  onSearch={onSearch}
-                  searchedComics={searchedComics}
-                />
-              </Col>
-              <Col span={4}>
-                {
-                  !user
-                    ? <AuthenOnlyGoogleField />
-                    : <UserField user={user} logout={logout}/>
-                }
-              </Col>
-            </>
-            : <>
-              <Col span={8}></Col>
               <Col span={4} style={{
                 display: 'flex', 
                 justifyContent: 'center', 
@@ -115,9 +99,28 @@ export const HeaderMain : React.FC = observer(() => {
                   <HeaderSearchBar 
                     onSearch={onSearch}
                     searchedComics={searchedComics}
+                    onClickItemMenu={onClickItemMenu}
                   />
                   <MenuMain genres={genres} onClickItemMenu={onClickItemMenu}/>
                 </Drawer>
+              </Col>
+            </>
+            : <>
+              <Col span={isTablet ? 10 : 13}>
+                <MenuMain genres={genres} onClickItemMenu={onClickItemMenu} />
+              </Col>
+              <Col span={isTablet ? 8 : 5}>
+                <HeaderSearchBar 
+                  onSearch={onSearch}
+                  searchedComics={searchedComics}
+                />
+              </Col>
+              <Col span={4}>
+                {
+                  !user
+                    ? <AuthenOnlyGoogleField />
+                    : <UserField user={user} logout={logout}/>
+                }
               </Col>
             </>
         }
