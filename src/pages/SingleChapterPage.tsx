@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRootStore } from "../stores";
 import { ContentSingleChapter } from "../components/Contents";
+import { Helmet } from "react-helmet";
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -16,7 +17,9 @@ const contentStyle: React.CSSProperties = {
 export const SingleChapterPage : React.FC = observer(() => {
   const { comicId, chapterId } = useParams();
   const { comicStore } = useRootStore();
-  const { singleChapter, getSingleChapter } = comicStore
+  const { singleChapter, comicDetail, getSingleChapter } = comicStore
+  const { chapter_name } = singleChapter
+  const { thumbnail, description, title } = comicDetail
 
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -29,8 +32,18 @@ export const SingleChapterPage : React.FC = observer(() => {
   }, [comicId, chapterId])
 
   return (
-    <Content style={contentStyle}>
-      <ContentSingleChapter singleChapter={singleChapter} loading={loading} comicId={comicId!} chapterId={`${chapterId}`} />
-    </Content>
+    <>
+      <Helmet>
+        <title>{`${title} ${chapter_name}`} | Truyện Chibi 🌟</title>
+        <meta
+          name="description"
+          content={description}
+        />
+        <meta property="og:image" content={thumbnail} />
+      </Helmet>
+      <Content style={contentStyle}>
+        <ContentSingleChapter singleChapter={singleChapter} loading={loading} comicId={comicId!} chapterId={`${chapterId}`} />
+      </Content>
+    </>
   )
 })

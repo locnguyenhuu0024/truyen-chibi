@@ -5,6 +5,7 @@ import { BrightColorPalette as Palette } from "../styles/palette";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useRootStore } from "../stores";
+import { Helmet } from "react-helmet";
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -17,6 +18,7 @@ export const ComicDetailPage : React.FC = observer(() => {
   const { comicId } = useParams();
   const { comicStore } = useRootStore();
   const { comicDetail, getComicDetail } = comicStore
+  const { description, title, thumbnail } = comicDetail
 
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -28,8 +30,18 @@ export const ComicDetailPage : React.FC = observer(() => {
   }, [comicId])
   
   return (
-    <Content style={contentStyle}>
-      <ContentComicDetail loading={loading} comicDetail={comicDetail} />
-    </Content>
+    <>
+      <Helmet>
+        <title>{title} | Truyện Chibi 🌟</title>
+        <meta
+          name="description"
+          content={description}
+        />
+        <meta property="og:image" content={thumbnail} />
+      </Helmet>
+      <Content style={contentStyle}>
+        <ContentComicDetail loading={loading} comicDetail={comicDetail} />
+      </Content>
+    </>
   )
 })
