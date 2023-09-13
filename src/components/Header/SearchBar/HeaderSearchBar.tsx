@@ -70,7 +70,7 @@ export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({
             <ListSearchedComic listSearchedComic={searchedComics} onClickItemMenu={handleClosePopup}/>
           }
           open={opened}
-          trigger="click"
+          trigger="hover"
           placement="bottom"
           className="popover-list-search-comics"
         >
