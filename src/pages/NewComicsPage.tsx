@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ContentNewComics } from "../components/Contents";
 import { Divider } from "antd";
 import { CustomizeTitle } from "../components/Customizes";
+import { Helmet } from "react-helmet";
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -26,9 +27,19 @@ export const NewComicsPage : React.FC = observer(() => {
   }, [])
 
   return (
-    <Content style={contentStyle}>
-      <Divider><CustomizeTitle title="Truyện mới" /></Divider>
-      <ContentNewComics comics={newComics} getNewComic={getNewComics} loading={loading} />
-    </Content>
+    <>
+      <Helmet>
+        <title>Truyện tranh mới | Truyện Chibi 🌟</title>
+        <meta
+          name="description"
+          content="Truyện Chibi là nơi bạn sẽ khám phá thế giới truyện tranh dễ thương độc đáo, cùng những câu chuyện tuyệt vời. Với bộ sưu tập đa dạng và chất lượng, chúng tôi mang đến cho bạn những giây phút giải trí thú vị. Khám phá ngay và cùng chia sẻ niềm đam mê truyện tranh tại Truyện Chibi! 📚✨"
+        />
+        <meta property="og:image" content={'/truyen-chibi.png'} />
+      </Helmet>
+      <Content style={contentStyle}>
+        <Divider><CustomizeTitle title="Truyện mới" /></Divider>
+        <ContentNewComics comics={newComics} getNewComic={getNewComics} loading={loading} />
+      </Content>
+    </>
   )
 })
