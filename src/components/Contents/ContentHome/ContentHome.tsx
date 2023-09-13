@@ -5,6 +5,7 @@ import { ComicsListMain } from "./ComicsList";
 import { useEffect, useState } from "react";
 import { useRootStore } from "../../../stores";
 import { TrendingComicsList } from "./TrendingComicsList";
+import useScreenSize from "../../../utils/screenWidth";
 
 
 export const ContentHome : React.FC = observer(() => {
@@ -15,6 +16,7 @@ export const ContentHome : React.FC = observer(() => {
     getTrendComics,
     getRecentUpdatedComics
   } = comicStore;
+  const {isLargeScreen} = useScreenSize()
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export const ContentHome : React.FC = observer(() => {
   return (
     <div>
       <Divider><strong>TRUYỆN NỔI BẬT</strong></Divider>
-      <CarouselBanner comicsResponse={trendingComics} />
+      {isLargeScreen &&  <CarouselBanner comicsResponse={trendingComics} />}
       <TrendingComicsList trendingComics={trendingComics.comics} loading={loading} />
       <Divider><strong>TRUYỆN VỪA CẬP NHẬT</strong></Divider>
       <ComicsListMain comicResponse={recentUpdatedComics} />

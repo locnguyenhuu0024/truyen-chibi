@@ -16,7 +16,7 @@ const useScreenSize = () => {
       setIsMobile(true);
       setIsTablet(false);
       setIsLargeScreen(false);
-    } else if (screenWidth >= Breakpoints.ExtraLarge && screenWidth < Breakpoints.Medium) {
+    } else if (screenWidth >= Breakpoints.Small && screenWidth < Breakpoints.Medium) {
       setIsMobile(false);
       setIsTablet(true);
       setIsLargeScreen(false);

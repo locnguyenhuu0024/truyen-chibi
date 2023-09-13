@@ -2,12 +2,13 @@ import Search from "antd/es/input/Search"
 import { Col, Popover, Row } from "antd"
 import { Comic } from "../../../types/Comic"
 import { ListSearchedComic } from "./ListSearchedComics"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 
 type HeaderSearchBarProps = {
   onSearch: (query: string) => void,
-  searchedComics: Comic[]
+  searchedComics: Comic[],
+  onClickItemMenu?: () => void,
 }
 
 const searchBarStyle = { 
@@ -16,10 +17,24 @@ const searchBarStyle = {
   fontSize: 16
 }
 
-export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({onSearch, searchedComics}) => {
+export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({
+  onSearch, 
+  searchedComics,
+  onClickItemMenu,
+}) => {
   const [query, setQuery] = useState<string>('')
   // Sử dụng state để lưu trạng thái của setTimeout
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>();
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout>()
+  const [currentSearchList, setCurrentSearchList] = useState<Comic[]>([])
+  const opened = currentSearchList?.length > 0
+
+  useEffect(() => {
+    if(!query || searchedComics?.length === 0){
+      setCurrentSearchList([])
+      return
+    }
+    setCurrentSearchList(searchedComics)
+  }, [searchedComics, query])
 
   // Hàm này được gọi khi người dùng thay đổi giá trị trong input
   const handleInputChange = (event : React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +42,7 @@ export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({onSea
     
     // Hủy bỏ bất kỳ timeout cũ nào để tránh tìm kiếm không cần thiết
     if (searchTimeout) {
-      clearTimeout(searchTimeout);
+      clearTimeout(searchTimeout)
     }
 
     // Đặt timeout mới, sau 300ms, tìm kiếm sẽ được thực hiện
@@ -42,14 +57,19 @@ export const HeaderSearchBar : React.FC<HeaderSearchBarProps> = observer(({onSea
     setQuery(newQuery);
   }
 
+  const handleClosePopup = () => {
+    onClickItemMenu!()
+    setCurrentSearchList([])
+  }
+
   return (
     <Row style={{width: '100%'}} justify={'center'} align={'middle'}>
       <Col>
         <Popover
           content={
-            <ListSearchedComic listSearchedComic={searchedComics} />
+            <ListSearchedComic listSearchedComic={searchedComics} onClickItemMenu={handleClosePopup}/>
           }
-          
+          open={opened}
           trigger="hover"
           placement="bottom"
           className="popover-list-search-comics"

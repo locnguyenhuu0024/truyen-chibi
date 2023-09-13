@@ -24,11 +24,11 @@ const siderStyle: React.CSSProperties = {
 };
 
 export const IndexPage : React.FC = observer(() => {
-  const { isMobile } = useScreenSize()
+  const { isLargeScreen } = useScreenSize()
   return (
     <Layout hasSider>
       {
-        !isMobile ? <Sider style={siderStyle}></Sider> : <></>
+        isLargeScreen && <Sider style={siderStyle}></Sider>
       }
       <Routes>
         <Route path={RouteComics.Home} Component={HomePage} />
@@ -41,7 +41,7 @@ export const IndexPage : React.FC = observer(() => {
         <Route path={RouteComics.BoyComics} Component={BoyComicsPage} />
       </Routes>
       {
-        !isMobile ? <Sider style={siderStyle}></Sider> : <></>
+        isLargeScreen && <Sider style={siderStyle}></Sider>
       }
     </Layout>
   )

@@ -1,0 +1,7 @@
+.ant-col{
+  height: fit-content !important;
+}
+
+.ant-menu-submenu.ant-menu-submenu-popup.ant-menu.ant-menu-submenu-placement-bottomRight{
+  inset: 64px auto auto 50px !important;
+};

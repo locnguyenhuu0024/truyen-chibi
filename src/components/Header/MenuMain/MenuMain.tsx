@@ -9,10 +9,12 @@ import { Link } from 'react-router-dom';
 import { RouteComicEnums as RouteComics } from '../../../types/Route';
 import useScreenSize from '../../../utils/screenWidth';
 import { getComicGenre, getNewComic, getTrendComic } from '../../../utils/getRoute';
+import './menuMain.css'
 
 type MenuMainProps = {
   genres: Genre[] | null
   onClickItemMenu: () => void
+  isOnHeader?: boolean
 }
 
 const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
@@ -21,6 +23,15 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
       key: 'home',
       icon: <HomeOutlined />,
       label: <Link to={RouteComics.Home}>Trang chủ</Link>,
+    },
+    {
+      key: 'genres',
+      icon: <BarsOutlined />,
+      label: 'Thể loại',
+      children: genres?.map((genre): ItemType => ({
+        key: genre.id,
+        label: <Link to={getComicGenre(genre.id)}>{genre.name}</Link>
+      })),
     },
     {
       key: 'trending',
@@ -42,24 +53,15 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
       icon: <MinusCircleOutlined />,
       label: <Link to={RouteComics.GirlComics}>Girl</Link>,
     },
-    {
-      key: 'genres',
-      icon: <BarsOutlined />,
-      label: 'Thể loại',
-      children: genres?.map((genre): ItemType => ({
-        key: genre.id,
-        label: <Link to={getComicGenre(genre.id)}>{genre.name}</Link>
-      }))
-    },
   ])
 }
-export const MenuMain: React.FC<MenuMainProps> = observer(({genres, onClickItemMenu}) => {
+export const MenuMain: React.FC<MenuMainProps> = observer(({genres, isOnHeader, onClickItemMenu}) => {
   const { isMobile } = useScreenSize()
-  
+  const mode = isMobile && isOnHeader ? 'horizontal' : isMobile ? 'inline' : 'horizontal'
   return (
     <Menu 
       style={{backgroundColor: BrightColorPalette.Primary, color: '#FFFFFF'}} 
-      mode={isMobile ? 'inline' : 'horizontal'} 
+      mode={mode} 
       items={menuMain(genres)} 
       onClick={onClickItemMenu}
     />
