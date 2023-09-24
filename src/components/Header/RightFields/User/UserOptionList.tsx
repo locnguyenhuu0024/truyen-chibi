@@ -1,9 +1,13 @@
 import { BookOutlined, InfoCircleOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Button, List } from "antd";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
+import { RouteComicEnums } from "../../../../types/Route";
 
 type UserOptionListProps = {
   signOut: () => void,
+  onClickItemMenu: () => void,
+  closeUserField: () => void,
 }
 
 const optionList = [
@@ -14,7 +18,7 @@ const optionList = [
     icon: <InfoCircleOutlined />
   },
   {
-    id: 'Truyện yêu thích',
+    id: RouteComicEnums.FavoriteComics,
     type: 'defailt',
     title: 'Truyện yêu thích',
     icon: <BookOutlined />
@@ -27,7 +31,11 @@ const optionList = [
   },
 ];
 
-export const UserOptionList : React.FC<UserOptionListProps> = observer(({signOut}) => {
+export const UserOptionList : React.FC<UserOptionListProps> = observer(({signOut, onClickItemMenu, closeUserField}) => {
+  const closeAll = () => {
+    onClickItemMenu()
+    closeUserField()
+  }
   return (
     <List 
       dataSource={optionList}
@@ -37,15 +45,14 @@ export const UserOptionList : React.FC<UserOptionListProps> = observer(({signOut
           {
             option.type === 'logout'
               ? <Button 
-                type="link" 
+                type='link' 
                 icon={option.icon}
                 onClick={signOut}
               >{option.title}</Button>
-              : <Button 
-                type="link" 
+              : <Link to={option.id} onClick={closeAll}><Button 
+                type="text" 
                 icon={option.icon}
-                href="#"
-              >{option.title}</Button>
+              >{option.title}</Button></Link>
           }
         </div>
       )}
