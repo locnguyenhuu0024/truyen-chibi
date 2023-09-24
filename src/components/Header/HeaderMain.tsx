@@ -14,6 +14,8 @@ import useScreenSize from "../../utils/screenWidth"
 import { Button, Drawer, Image } from "antd"
 import { EllipsisOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom"
+import { getUserLocal } from "../../utils/localStorage"
+import { getFavoriteComics } from "../../apis/firestoreApi"
 
 const headerStyle = {
   backgroundColor: BrightColorPalette.Primary
@@ -22,7 +24,7 @@ const headerStyle = {
 export const HeaderMain : React.FC = observer(() => {
   const { authStore, comicStore } = useRootStore();
   const { isMobile, isTablet } = useScreenSize()
-  const { user, logout } = authStore
+  const { user, logout, setUser } = authStore
   const { genres, getGenres } = comicStore
 
   const [searchedComics, setSearchedComics] = useState<Comic[]>([])
@@ -30,6 +32,11 @@ export const HeaderMain : React.FC = observer(() => {
 
   useEffect(() => {
     getGenres()
+    const userLocal = getUserLocal()
+    if(userLocal){
+      setUser(userLocal)
+      getFavoriteComics(userLocal!.uid)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,7 +92,7 @@ export const HeaderMain : React.FC = observer(() => {
                         {
                           !user
                             ? <AuthenOnlyGoogleField />
-                            : <UserField user={user} logout={logout}/>
+                            : <UserField user={user} logout={logout} onClickItemMenu={onClickItemMenu}/>
                         }
                       </Col>
                     </Row>
@@ -119,7 +126,7 @@ export const HeaderMain : React.FC = observer(() => {
                 {
                   !user
                     ? <AuthenOnlyGoogleField />
-                    : <UserField user={user} logout={logout}/>
+                    : <UserField user={user} logout={logout} onClickItemMenu={onClickItemMenu}/>
                 }
               </Col>
             </>

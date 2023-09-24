@@ -1,9 +1,14 @@
 import { Col, Row, Image, Descriptions, Space, Button, DescriptionsProps, Skeleton } from "antd"
 import { CustomizeParagraph, CustomizeTag, CustomizeText, CustomizeTitle } from "../../Customizes"
 import { EyeOutlined, UserAddOutlined } from "@ant-design/icons"
-import { ComicDetail, StatusEnums } from "../../../types/Comic";
+import { ComicDetail, FavoriteComic, StatusEnums } from "../../../types/Comic";
 import useScreenSize from "../../../utils/screenWidth";
 import { emptyImage } from "../../../types/Route";
+import { addFavoriteComics, removeFavoriteComics } from "../../../apis/firestoreApi";
+import { useRootStore } from "../../../stores";
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 type ComicDetailFieldsProps = {
   comicDetail: ComicDetail,
@@ -52,11 +57,41 @@ const returnItems = (comicDetail: ComicDetail): DescriptionsProps['items'] => ([
   },
 ]);
 
-export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = ({comicDetail, loading}) => {
+export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = observer(({comicDetail, loading}) => {
   const { isMobile } = useScreenSize()
+  const {comicId} = useParams()
+  const {authStore, comicStore} = useRootStore()
   const { 
-    id, thumbnail, title, total_views, followers 
+    id, thumbnail, title, total_views, description
   } = comicDetail
+  const {user} = authStore
+  const {favoriteComics} = comicStore
+  const [isFollowed, setIsFollowed] = useState<boolean>(false)
+
+  useEffect(() => {
+    const foundComic = favoriteComics.find((fc) => fc.comicId === comicId)
+    setIsFollowed(foundComic ? true : false)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const followComic = async () => {
+    const data: FavoriteComic = {
+      comicId: id,
+      comicDescription: description,
+      comicName: title,
+      comicThumbnail: thumbnail
+    }
+    
+    if(!user?.uid || !comicId) return
+
+    if(isFollowed){
+      await removeFavoriteComics(user.uid, comicId)
+      setIsFollowed(false)
+    }else{
+      await addFavoriteComics(user.uid || '', data)
+      setIsFollowed(true)
+    }
+  }
   
   return (
     !isMobile 
@@ -72,8 +107,16 @@ export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = ({comicDetai
               size={'small'}
               items={returnItems(comicDetail)}
               extra={<Space>
-                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{` ${total_views}`}</Button>
-                <Button icon={<UserAddOutlined />} type='default' ghost danger disabled>{` ${followers}`}</Button>
+                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{`${total_views}`}</Button>
+                <Button 
+                  icon={<UserAddOutlined />} 
+                  type='primary' 
+                  onClick={followComic} danger
+                >
+                  {
+                    !isFollowed ? 'Theo dõi' : 'Đã theo dõi'
+                  }
+                </Button>
               </Space>}
             />
           </Col>
@@ -87,8 +130,17 @@ export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = ({comicDetai
             title={<Row justify={'start'}><Col span={24}>
               <CustomizeTitle title={title} ellipsis={true} />
               <Space>
-                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{` ${total_views}`}</Button>
-                <Button icon={<UserAddOutlined />} type='default' ghost danger disabled>{` ${followers}`}</Button>
+                <Button icon={<EyeOutlined />} type='default' ghost danger disabled>{`${total_views}`}</Button>
+                <Button 
+                  icon={<UserAddOutlined />} 
+                  type='primary' 
+                  onClick={followComic} 
+                  danger
+                >
+                  {
+                    !isFollowed ? 'Theo dõi' : 'Đã theo dõi'
+                  }
+                </Button>
               </Space>
             </Col></Row>}
             size={'small'}
@@ -97,4 +149,4 @@ export const ComicDetailFields : React.FC<ComicDetailFieldsProps> = ({comicDetai
         </Space>
       </Skeleton>
   )
-}
+})

@@ -22,7 +22,7 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
     {
       key: 'home',
       icon: <HomeOutlined />,
-      label: <Link to={RouteComics.Home}>Trang chủ</Link>,
+      label: <><Link to={RouteComics.Home}>Trang chủ</Link></>,
     },
     {
       key: 'genres',
@@ -30,28 +30,28 @@ const menuMain = (genres: Genre[] | null) : MenuProps['items'] => {
       label: 'Thể loại',
       children: genres?.map((genre): ItemType => ({
         key: genre.id,
-        label: <Link to={getComicGenre(genre.id)}>{genre.name}</Link>
+        label: <><Link to={getComicGenre(genre.id)}>{genre.name}</Link></>
       })),
     },
     {
       key: 'trending',
       icon: <FireOutlined />,
-      label: <Link to={getTrendComic()}>Trending</Link>,
+      label: <><Link to={getTrendComic()}>Trending</Link></>,
     },
     {
       key: 'new',
       icon: <StarOutlined />,
-      label: <Link to={getNewComic()}>Truyện mới</Link>,
+      label: <><Link to={getNewComic()}>Truyện mới</Link></>,
     },
     {
       key: 'boy',
       icon: <PlusCircleOutlined />,
-      label: <Link to={RouteComics.BoyComics}>Boy</Link>,
+      label: <><Link to={RouteComics.BoyComics}>Boy</Link></>,
     },
     {
       key: 'girl',
       icon: <MinusCircleOutlined />,
-      label: <Link to={RouteComics.GirlComics}>Girl</Link>,
+      label: <><Link to={RouteComics.GirlComics}>Girl</Link></>,
     },
   ])
 }

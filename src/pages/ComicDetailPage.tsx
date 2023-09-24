@@ -14,20 +14,47 @@ const contentStyle: React.CSSProperties = {
   backgroundColor: Palette.Background
 };
 
+const initialComic = {
+  title: "",
+  thumbnail: "",
+  description: "",
+  authors: "",
+  status: "",
+  genres: [],
+  total_views: 0,
+  followers: 0,
+  chapters: [],
+  id: "",
+  other_names: []
+}
+
 export const ComicDetailPage : React.FC = observer(() => {
   const { comicId } = useParams();
-  const { comicStore } = useRootStore();
-  const { comicDetail, getComicDetail } = comicStore
+  const { comicStore, authStore } = useRootStore();
+  const { user } = authStore
+  const { comicDetail, setComicDetail, getComicDetail, getFavoriteComics } = comicStore
   const { description, title, thumbnail } = comicDetail
 
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    if(!comicId) return;
-    getComicDetail(comicId)
-    setTimeout(() => {setLoading(false)}, 2000)
+    setLoading(true)
+    loadComicDetail(comicId!)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comicId])
+
+
+  const loadComicDetail = async (comicId: string) => {
+    if(comicDetail.id !== comicId) setComicDetail(initialComic)
+    if(!comicId) return;
+    await getComicDetail(comicId)
+    if(user?.uid){
+      await getFavoriteComics(user.uid)
+    }
+  }
   
   return (
     <>

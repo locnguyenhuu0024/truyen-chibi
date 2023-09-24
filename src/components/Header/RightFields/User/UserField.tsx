@@ -4,29 +4,34 @@ import { User } from "../../../../types/User"
 import { observer } from "mobx-react-lite"
 import { BrightColorPalette } from "../../../../styles/palette"
 import useScreenSize from "../../../../utils/screenWidth"
+import { useState } from "react"
 
 type UserFieldProps = {
   user: User | null,
   logout: () => void,
+  onClickItemMenu: () => void,
 }
 
-export const UserField : React.FC<UserFieldProps> = observer(({user, logout}) => {
+export const UserField : React.FC<UserFieldProps> = observer(({user, logout, onClickItemMenu}) => {
   const { isMobile } = useScreenSize()
+  const [open, setOpen] = useState<boolean>(false)
+  const closeUserField = () => setOpen(false)
   return (
     <Row justify={'end'} align={'middle'} style={{width: '100%', height: '100%'}}>
       <Col>
         <Popover
           content={
-            <UserOptionList signOut={logout}/>
+            <UserOptionList signOut={logout} onClickItemMenu={onClickItemMenu} closeUserField={closeUserField}/>
           }
-          trigger="hover"
+          trigger="click"
           placement="bottom"
           className="popover-list-search-comics"
+          open={open}
         >
           <Button 
             className="button user"
             type="default" 
-            onClick={() => {}}
+            onClick={() => setOpen(!open)}
             ghost
             style={{borderColor: isMobile ? BrightColorPalette.Accent : 'white'}}
           >
