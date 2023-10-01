@@ -73,6 +73,7 @@ export type ComicDetail = {
 export type Image = {
   page: number;
   src: string;
+  backup: string;
 }
 
 export type ChapterResponse = {
