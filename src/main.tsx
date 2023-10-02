@@ -9,12 +9,12 @@ import { Analytics } from '@vercel/analytics/react';
 const rootStore = new RootStore();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  <React.Fragment>
     <Router>
       <RootStoreContext.Provider value={rootStore}>
         <App />
       </RootStoreContext.Provider>
     </Router>
     <Analytics />
-  </React.StrictMode>,
+  </React.Fragment>,
 )

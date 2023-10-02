@@ -2,10 +2,12 @@ import { makeAutoObservable } from 'mobx'
 import { 
   ChapterResponse, 
   ComicDetail, ComicsResponse, 
+  FavoriteComic, 
   RecommendComic 
 } from '../types/Comic'
 import * as comicsApi from '../apis/comicsApi'
 import { Genre } from '../types/Genres'
+import { getFavoriteComics } from '../apis/firestoreApi'
 
 export class ComicStore {
   topComics: ComicsResponse = {
@@ -64,6 +66,7 @@ export class ComicStore {
     total_pages: 0,
     current_page: 0
   }
+  favoriteComics: FavoriteComic[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -120,6 +123,11 @@ export class ComicStore {
     this.setGirlComics(response)
   }
 
+  getFavoriteComics = async (userId: string) => {
+    const response = await getFavoriteComics(userId)
+    this.setFavoriteComics(response)
+  }
+
   // Set
 
   setTopCommics = (topComics : ComicsResponse) => {
@@ -160,6 +168,10 @@ export class ComicStore {
 
   setGirlComics = (girlComics: ComicsResponse) => {
     this.girlComics = girlComics
+  }
+
+  setFavoriteComics = (favoriteComics: FavoriteComic[]) => {
+    this.favoriteComics = favoriteComics
   }
 
   // Genres

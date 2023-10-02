@@ -15,6 +15,7 @@ import { ComicsByGenrePage } from "./ComicsByGenrePage";
 import { NewComicsPage } from "./NewComicsPage";
 import { BoyComicsPage } from "./BoyComicsPage";
 import { GirlComicsPage } from "./GirlComicsPage";
+import { FavoriteComicsPage } from "./FavoriteComicsPage";
 
 const siderStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -39,6 +40,7 @@ export const IndexPage : React.FC = observer(() => {
         <Route path={RouteComics.NewComics} Component={NewComicsPage} />
         <Route path={RouteComics.GirlComics} Component={GirlComicsPage} />
         <Route path={RouteComics.BoyComics} Component={BoyComicsPage} />
+        <Route path={RouteComics.FavoriteComics} Component={FavoriteComicsPage} />
       </Routes>
       {
         isLargeScreen && <Sider style={siderStyle}></Sider>

@@ -7,5 +7,7 @@ export type UserLogin = {
   password: string
 }
 
+export type SnapshotDocumentData = firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>
+
 export type UserCredential = firebase.auth.UserCredential
 export type User = firebase.User

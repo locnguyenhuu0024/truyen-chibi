@@ -4,6 +4,7 @@ import { Content } from "antd/es/layout/layout"
 import { BrightColorPalette as Palette } from "../styles/palette";
 import { ContentTrendingComics } from "../components/Contents";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -24,8 +25,18 @@ export const TrendingComicsPage : React.FC = observer(() => {
   }, [])
 
   return (
-    <Content style={contentStyle}>
-      <ContentTrendingComics comicResponse={trendingComics} getTrendingComics={getTrendComics} loading={loading} />
-    </Content>
+    <>
+      <Helmet>
+        <title>Truyện tranh xu hướng | Truyện Chibi 🌟</title>
+        <meta
+          name="description"
+          content="Truyện Chibi là nơi bạn sẽ khám phá thế giới truyện tranh dễ thương độc đáo, cùng những câu chuyện tuyệt vời. Với bộ sưu tập đa dạng và chất lượng, chúng tôi mang đến cho bạn những giây phút giải trí thú vị. Khám phá ngay và cùng chia sẻ niềm đam mê truyện tranh tại Truyện Chibi! 📚✨"
+        />
+        <meta property="og:image" content={'/truyen-chibi.png'} />
+      </Helmet>
+      <Content style={contentStyle}>
+        <ContentTrendingComics comicResponse={trendingComics} getTrendingComics={getTrendComics} loading={loading} />
+      </Content>
+    </>
   )
 })

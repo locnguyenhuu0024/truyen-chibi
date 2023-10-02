@@ -23,6 +23,7 @@ export enum RouteComicEnums {
   TopChapter = "/top/chapter",
   TopFollow = "/top/follow",
   TopComment = "/top/comment",
+  FavoriteComics = '/favorite-comics'
 }
 
 export const emptyImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJF" 

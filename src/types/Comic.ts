@@ -44,6 +44,13 @@ export interface SuggestionSearch {
   authors: string[];
 }
 
+export type FavoriteComic = {
+  comicId: string,
+  comicDescription: string,
+  comicName: string,
+  comicThumbnail: string
+}
+
 export type Chapter = {
   id: string;
   name: string;
@@ -66,6 +73,7 @@ export type ComicDetail = {
 export type Image = {
   page: number;
   src: string;
+  backup: string;
 }
 
 export type ChapterResponse = {

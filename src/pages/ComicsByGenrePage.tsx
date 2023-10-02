@@ -11,6 +11,7 @@ import { CustomizeText } from "../components/Customizes";
 import { getComicGenre } from "../utils/getRoute";
 import { Genre } from "../types/Genres";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -50,18 +51,28 @@ export const ComicsByGenrePage : React.FC = observer(() => {
   }, [genreId, currentGenreId])
 
   return (
-    <Content style={contentStyle}>
-      <Divider>Thể loại {currentGenre?.name}</Divider>
-      <Dropdown 
-        menu={{items: genreItems(genres!)}} 
-        trigger={['click']}
-      >
-        <Button 
-          style={{width: '100%'}} 
-          icon={<UnorderedListOutlined />}
-        ><CustomizeText value={currentGenre?.name as string} style={{color: Palette.SecondaryText, fontSize: 16}}/></Button>
-      </Dropdown>
-      <ContentComicsByGenre comicsResponse={comicsByGenre} loading={loading} />
-    </Content>
+    <>
+      <Helmet>
+        <title>Thể loại {currentGenre?.name} | Truyện Chibi 🌟</title>
+        <meta
+          name="description"
+          content={currentGenre?.desscription}
+        />
+        <meta property="og:image" content={'/truyen-chibi.png'} />
+      </Helmet>
+      <Content style={contentStyle}>
+        <Divider>Thể loại {currentGenre?.name}</Divider>
+        <Dropdown 
+          menu={{items: genreItems(genres!)}} 
+          trigger={['click']}
+        >
+          <Button 
+            style={{width: '100%'}} 
+            icon={<UnorderedListOutlined />}
+          ><CustomizeText value={currentGenre?.name as string} style={{color: Palette.SecondaryText, fontSize: 16}}/></Button>
+        </Dropdown>
+        <ContentComicsByGenre comicsResponse={comicsByGenre} loading={loading} />
+      </Content>
+    </>
   )
 })

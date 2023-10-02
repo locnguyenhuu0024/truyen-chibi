@@ -1,6 +1,6 @@
 import { Col, Row } from "antd/es/grid"
 import { Header } from "antd/es/layout/layout"
-import { HeaderSearchBar } from "./SearchBar"
+import { HeaderSearchBar, SearchBarPopup } from "./SearchBar"
 import { BrightColorPalette } from "../../styles/palette"
 import { searchComics } from "../../apis/comicsApi"
 import { useEffect, useState } from "react"
@@ -9,20 +9,23 @@ import './header.css'
 import { AuthenOnlyGoogleField, UserField } from "./RightFields"
 import { observer } from "mobx-react-lite"
 import { useRootStore } from "../../stores"
-import { MenuMain } from "./MenuMain/MenuMain"
+import { MenuMain, MenuMobileMain } from "./MenuMain"
 import useScreenSize from "../../utils/screenWidth"
 import { Button, Drawer, Image } from "antd"
 import { EllipsisOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom"
+import { getUserLocal } from "../../utils/localStorage"
+import { getFavoriteComics } from "../../apis/firestoreApi"
 
-const headerStyle = {
-  backgroundColor: BrightColorPalette.Primary
+const headerStyle: React.CSSProperties = {
+  backgroundColor: BrightColorPalette.Primary,
+  padding: '0px 24px'
 }
 
 export const HeaderMain : React.FC = observer(() => {
   const { authStore, comicStore } = useRootStore();
   const { isMobile, isTablet } = useScreenSize()
-  const { user, logout } = authStore
+  const { user, logout, setUser } = authStore
   const { genres, getGenres } = comicStore
 
   const [searchedComics, setSearchedComics] = useState<Comic[]>([])
@@ -30,6 +33,11 @@ export const HeaderMain : React.FC = observer(() => {
 
   useEffect(() => {
     getGenres()
+    const userLocal = getUserLocal()
+    if(userLocal){
+      setUser(userLocal)
+      getFavoriteComics(userLocal!.uid)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -58,8 +66,15 @@ export const HeaderMain : React.FC = observer(() => {
         {
           isMobile 
             ? <>
-              <Col span={16}>
-                <MenuMain genres={genres} onClickItemMenu={onClickItemMenu} isOnHeader={true} />
+              <Col span={12}>
+                <MenuMobileMain genres={genres} onClickItemMenu={onClickItemMenu} isOnHeader={true} />
+              </Col>
+              <Col span={4}>
+                <SearchBarPopup
+                  onSearch={onSearch}
+                  searchedComics={searchedComics}
+                  onClickItemMenu={onClickItemMenu}
+                />
               </Col>
               <Col span={4} style={{
                 display: 'flex', 
@@ -85,7 +100,7 @@ export const HeaderMain : React.FC = observer(() => {
                         {
                           !user
                             ? <AuthenOnlyGoogleField />
-                            : <UserField user={user} logout={logout}/>
+                            : <UserField user={user} logout={logout} onClickItemMenu={onClickItemMenu}/>
                         }
                       </Col>
                     </Row>
@@ -119,7 +134,7 @@ export const HeaderMain : React.FC = observer(() => {
                 {
                   !user
                     ? <AuthenOnlyGoogleField />
-                    : <UserField user={user} logout={logout}/>
+                    : <UserField user={user} logout={logout} onClickItemMenu={onClickItemMenu}/>
                 }
               </Col>
             </>
