@@ -14,65 +14,67 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 const contentStyle: React.CSSProperties = {
-  textAlign: 'center',
+  textAlign: "center",
   minHeight: 120,
-  lineHeight: '120px',
-  backgroundColor: Palette.Background
+  lineHeight: "120px",
+  backgroundColor: Palette.Background,
 };
 
-const genreItems = (genres: Genre[]): MenuProps['items'] => (
-  genres?.map(genre => ({
-    key: genre.id, 
-    label: <Link to={getComicGenre(genre.id)}>{genre.name}</Link>
-  }))
-)
+const genreItems = (genres: Genre[]): MenuProps["items"] =>
+  genres?.map((genre) => ({
+    key: genre.id,
+    label: <Link to={getComicGenre(genre.id)}>{genre?.name}</Link>,
+  }));
 
-export const ComicsByGenrePage : React.FC = observer(() => {
-  const {genreId} = useParams()
-  const {comicStore} = useRootStore()
-  const { genres, comicsByGenre, getComicsByGenre } = comicStore
-  const [loading, setLoading] = useState<boolean>(true)
-  const [currentGenreId, setCurrentGenre] = useState<string>('')
-  const currentGenre = genres?.filter(genre => genre.id === genreId)[0]
+export const ComicsByGenrePage: React.FC = observer(() => {
+  const { genreId } = useParams();
+  const { comicStore } = useRootStore();
+  const { genres, comicsByGenre, getComicsByGenre } = comicStore;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [currentGenreId, setCurrentGenre] = useState<string>("");
+  const currentGenre = genres?.filter((genre) => genre.id === genreId)[0];
 
   useEffect(() => {
-    if(!genreId) return
-    
-    if(genreId !== currentGenreId){
-      setLoading(true)
-      getComicsByGenre(genreId)
-      setCurrentGenre(genreId)
-      const timeOutLoading = setTimeout(() => {setLoading(false)}, 1000)
-      clearTimeout(timeOutLoading)
-    }else{
-      setTimeout(() => {setLoading(false)}, 1000)
+    if (!genreId) return;
+
+    if (genreId !== currentGenreId) {
+      setLoading(true);
+      getComicsByGenre(genreId);
+      setCurrentGenre(genreId);
+      const timeOutLoading = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      clearTimeout(timeOutLoading);
+    } else {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [genreId, currentGenreId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [genreId, currentGenreId]);
 
   return (
     <>
       <Helmet>
         <title>Thể loại {currentGenre?.name} | Truyện Chibi 🌟</title>
-        <meta
-          name="description"
-          content={currentGenre?.desscription}
-        />
-        <meta property="og:image" content={'/truyen-chibi.png'} />
+        <meta name="description" content={currentGenre?.desscription} />
+        <meta property="og:image" content={"/truyen-chibi.png"} />
       </Helmet>
       <Content style={contentStyle}>
         <Divider>Thể loại {currentGenre?.name}</Divider>
-        <Dropdown 
-          menu={{items: genreItems(genres!)}} 
-          trigger={['click']}
-        >
-          <Button 
-            style={{width: '100%'}} 
-            icon={<UnorderedListOutlined />}
-          ><CustomizeText value={currentGenre?.name as string} style={{color: Palette.SecondaryText, fontSize: 16}}/></Button>
+        <Dropdown menu={{ items: genreItems(genres!) }} trigger={["click"]}>
+          <Button style={{ width: "100%" }} icon={<UnorderedListOutlined />}>
+            <CustomizeText
+              value={currentGenre?.name as string}
+              style={{ color: Palette.SecondaryText, fontSize: 16 }}
+            />
+          </Button>
         </Dropdown>
-        <ContentComicsByGenre comicsResponse={comicsByGenre} loading={loading} />
+        <ContentComicsByGenre
+          comicsResponse={comicsByGenre}
+          loading={loading}
+        />
       </Content>
     </>
-  )
-})
+  );
+});
